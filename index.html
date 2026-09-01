@@ -122,11 +122,6 @@
   .pdoc-foot b { font-size:17px; color:#8F5F1E; font-weight:500; opacity:0; transition:opacity .4s var(--ease) 1.7s; }
   .mpanel.play .pdoc-foot b { opacity:1; }
   .pdoc.small { padding-bottom:16px; }
-  .stamp { position:absolute; right:18px; top:40px; border:3px solid #2E6B4F; color:#2E6B4F; border-radius:6px;
-    font-family:var(--disp); font-weight:500; font-size:20px; letter-spacing:.08em; padding:4px 14px;
-    transform:rotate(-9deg) scale(1.8); opacity:0; }
-  .mpanel.play .stamp { animation:stampin .45s var(--ease) .4s forwards; }
-  @keyframes stampin { from { transform:rotate(-9deg) scale(1.8); opacity:0; } 60% { transform:rotate(-9deg) scale(0.94); opacity:1; } to { transform:rotate(-9deg) scale(1); opacity:1; } }
   .pdoc-status { display:flex; align-items:center; gap:8px; margin-top:14px; font-size:12.5px; color:#5D616A; }
   .pdoc-status .pulse { width:7px; height:7px; border-radius:50%; background:#2E6B4F; animation:ppulse 1.6s var(--ease) infinite; }
   @keyframes ppulse { 0%,100% { box-shadow:0 0 0 0 rgba(46,107,79,0.5); } 50% { box-shadow:0 0 0 6px rgba(46,107,79,0); } }
@@ -257,12 +252,12 @@
   .dusk-cta .pill { margin:40px auto 0; box-shadow:0 6px 24px rgba(26,26,26,0.10); border:1px solid rgba(29,32,37,0.14); }
   .dusk-cta .pill button { background:var(--ink); }
   .dusk-cta .below { margin-top:20px; font-size:14px; color:var(--ink-sub); }
-  .bigbox { max-width:680px; margin:40px auto 0; background:#fff; border:1px solid rgba(29,32,37,0.14); border-radius:14px; padding:18px 20px 16px; box-shadow:0 6px 24px rgba(26,26,26,0.10); text-align:left; }
-  .bigbox textarea { width:100%; min-height:120px; border:none; outline:none; resize:none; font-family:var(--sans); font-size:15.5px; line-height:1.6; color:var(--ink); background:transparent; }
-  .bigbox textarea::placeholder { color:#8A8E96; }
-  .bigbox-row { display:flex; align-items:center; gap:16px; flex-wrap:wrap; border-top:1px solid rgba(29,32,37,0.1); padding-top:14px; margin-top:8px; }
-  .bigbox .ws-send { background:var(--ink); color:var(--bone); }
-  .bigbox-alt { font-size:13px; color:var(--ink-sub); }
+  .cta-row { display:flex; flex-direction:column; align-items:center; gap:16px; margin-top:36px; }
+  .ws-send.big { height:52px; padding:0 34px; font-size:16px; }
+  .dusk-cta .ws-send.big { background:var(--ink); color:var(--bone); }
+  .bigbox-alt { font-size:13.5px; color:var(--ink-sub); }
+  .ws-card.flash { animation:cardflash 1.1s var(--ease); }
+  @keyframes cardflash { 0% { box-shadow:0 0 0 0 rgba(var(--indigo),0); } 30% { box-shadow:0 0 0 5px rgba(var(--indigo),0.35); } 100% { box-shadow:0 0 0 0 rgba(var(--indigo),0); } }
   .bigbox-alt a { color:var(--ink); text-decoration:underline; text-underline-offset:3px; }
 
   /* ---------- DARK BAND ---------- */
@@ -452,8 +447,7 @@
     </div>
     <div class="mpanel p3" id="mp3">
       <div class="pdoc small">
-        <div class="pdoc-head"><span>GRAIN — PROPOSAL</span><span>FLAT FEE $3,000</span></div>
-        <div class="stamp">APPROVED</div>
+        <div class="pdoc-head"><span>GRAIN — PROPOSAL</span><span>FLAT FEE $3,000 · APPROVED</span></div>
         <div class="pdoc-status"><span class="pulse"></span>Work started today · first update tomorrow</div>
       </div>
     </div>
@@ -500,12 +494,9 @@
   <div class="wrap">
     <h2 class="rv">See what your project costs</h2>
     <p class="sec-sub rv rv2">A few messy sentences are enough to start.</p>
-    <div class="bigbox rv rv3">
-      <textarea id="midBox" placeholder="Type out your problem here. Rough is fine; we sort it out."></textarea>
-      <div class="bigbox-row">
-        <button class="ws-send" data-open-ws data-seed="midBox">Get it scoped</button>
-        <span class="bigbox-alt">Not ready to type it all? Text your questions to <a href="sms:+15126539872">512-653-9872</a> right now.</span>
-      </div>
+    <div class="cta-row rv rv3">
+      <button class="ws-send big" data-open-ws>Get it scoped</button>
+      <span class="bigbox-alt">Not ready to type it all? Text your questions to <a href="sms:+15126539872">512-653-9872</a> right now.</span>
     </div>
   </div>
 </section>
@@ -573,9 +564,8 @@
       <div style="position:relative; z-index:3;">
         <h2>What do you need done?</h2>
         <p class="sec-sub">Fixed quote within one business day. No commitment until you approve the scope.</p>
-        <div class="pill" style="max-width:520px;">
-          <input type="text" id="closeInput" placeholder="Describe the project — rough is fine" autocomplete="off">
-          <button data-open-ws data-seed="closeInput">Get it scoped</button>
+        <div class="cta-row dark-row">
+          <button class="ws-send big" data-open-ws>Get it scoped</button>
         </div>
         <p class="close-alt">or text us at <a href="sms:+15126539872">512-653-9872</a></p>
       </div>
@@ -657,19 +647,18 @@ function setStep(i) {
   pgs.forEach((el, k) => { el.classList.toggle('on', k < i); el.classList.toggle('now', k === i); });
   if (i === 1) setTimeout(() => document.getElementById('fName').focus(), 60);
 }
-function openWS(seedText) {
-  if (seedText) { editor.value = editor.value ? editor.value + '\n' + seedText : seedText; }
+function openWS() {
   if (!submitted && stepIdx !== 0) setStep(0);
-  schedule();
   scrollTo({ top: 0, behavior: 'smooth' });
-  setTimeout(() => editor.focus(), 450);
+  const card = document.querySelector('.ws-card');
+  setTimeout(() => {
+    editor.focus({ preventScroll: true });
+    card.classList.remove('flash');
+    void card.offsetWidth;
+    card.classList.add('flash');
+  }, 500);
 }
-document.querySelectorAll('[data-open-ws]').forEach(b => b.addEventListener('click', () => {
-  const seedId = b.getAttribute('data-seed');
-  const src = seedId ? document.getElementById(seedId) : null;
-  openWS(src ? src.value.trim() : '');
-  if (src) src.value = '';
-}));
+document.querySelectorAll('[data-open-ws]').forEach(b => b.addEventListener('click', () => openWS()));
 /* voice input */
 (function () {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
