@@ -1,0 +1,815 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grain — Tell us what you need done</title>
+<meta name="description" content="Grain scopes, prices, and delivers whole projects. Describe the problem in plain language — we own the result.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500&family=Familjen+Grotesk:wght@400;500&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark:#161A21; --dark2:#1D232E; --panel:#202734;
+    --line-d:rgba(237,238,242,0.10);
+    --td:#EDEEF2; --td-sub:rgba(237,238,242,0.70); --td-mut:rgba(237,238,242,0.45);
+    --bone:#F5F4F1; --ink:#1D2025; --ink-sub:#5D616A; --line-l:rgba(29,32,37,0.10);
+    --indigo:105,118,220; --amber:232,179,107;
+    --sans:'Familjen Grotesk',sans-serif; --disp:'Archivo',sans-serif; --mono:'Spline Sans Mono',monospace;
+    --ease:cubic-bezier(.4,0,.2,1);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--dark); color:var(--td); font-family:var(--sans); font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+  .wrap { max-width:1280px; margin:0 auto; padding:0 40px; position:relative; z-index:3; }
+  a { color:inherit; text-decoration:none; transition:opacity .2s var(--ease); }
+  a:hover { opacity:.65; }
+  button { font-family:var(--sans); }
+
+  :root { --grid:22px; }
+  .noise, .fielddots, .wash { position:absolute; inset:0; pointer-events:none; }
+  /* ONE viewport-fixed sky shared by every section — boundaries can never mismatch */
+  .wash { z-index:1; background:
+    radial-gradient(1100px 640px at 78% -6%, rgba(var(--indigo),0.16), transparent 62%),
+    radial-gradient(980px 560px at -6% 105%, rgba(var(--amber),0.10), transparent 60%),
+    radial-gradient(700px 440px at 50% 62%, rgba(var(--indigo),0.05), transparent 70%);
+    background-attachment:fixed; }
+  .fielddots { z-index:2; background-size:var(--grid) var(--grid); background-attachment:fixed; }
+  .on-dark .fielddots { background-image:radial-gradient(rgba(237,238,242,0.55) 0.8px, transparent 1.2px); opacity:.10; }
+  .on-light .fielddots { background-image:radial-gradient(rgba(29,32,37,0.5) 0.8px, transparent 1.2px); opacity:.09; }
+  /* brighter windows onto the SAME fixed 22px field (replaces all ad-hoc dot decorations) */
+  .dotwin { position:absolute; pointer-events:none; background-size:var(--grid) var(--grid); background-attachment:fixed; }
+  .dotwin.win-light { background-image:radial-gradient(rgba(237,238,242,0.8) 1.1px, transparent 1.5px); }
+  .dotwin.win-ink { background-image:radial-gradient(rgba(29,32,37,0.6) 1.1px, transparent 1.5px); }
+  .noise { z-index:2; opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.035 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  /* reveals */
+  .rv { opacity:0; transform:translateY(16px); transition:opacity .6s var(--ease), transform .6s var(--ease); }
+  .rv.in { opacity:1; transform:none; }
+  .rv2 { transition-delay:.08s; } .rv3 { transition-delay:.16s; }
+  @media (prefers-reduced-motion: reduce) { .rv { opacity:1; transform:none; transition:none; } }
+
+  /* ---------- WORDMARK ---------- */
+  .wm { font-family:var(--disp); font-weight:500; letter-spacing:-0.02em; line-height:1; display:inline-block; white-space:nowrap; }
+  .gslot { position:relative; display:inline-block; }
+  .gslot .ghost { opacity:0; }
+  .gslot svg { position:absolute; left:0; top:0; width:100%; height:100%; overflow:visible; }
+  .gslot circle { transform-origin:center; }
+  .wm-anim .gslot circle { opacity:0; }
+  .wm-anim.assembled .gslot circle { opacity:1; transition:opacity .4s var(--ease); }
+
+  /* ---------- MATRIX SEAMS ---------- */
+  .seam { height:380px; position:relative; z-index:4; overflow:hidden; }
+  .seam .grad { position:absolute; inset:0; }
+  .seam .mx1, .seam .mx2 { position:absolute; inset:0; background-attachment:fixed; }
+  .seam.d2l .grad { background:linear-gradient(180deg, #161A21 0%, #232830 22%, #43474C 44%, #83837F 64%, #C8C6BF 84%, #F5F4F1 100%); }
+  .seam.d2l .mx1 { background-image:radial-gradient(rgba(245,244,241,0.5) 1.1px, transparent 1.5px); background-size:var(--grid) var(--grid); opacity:.4;
+    -webkit-mask-image:linear-gradient(180deg, transparent 8%, #000 42%, transparent 72%); mask-image:linear-gradient(180deg, transparent 8%, #000 42%, transparent 72%); }
+  .seam.d2l .mx2 { background-image:radial-gradient(rgba(22,26,33,0.5) 1.3px, transparent 1.7px); background-size:var(--grid) var(--grid); opacity:.38;
+    -webkit-mask-image:linear-gradient(180deg, transparent 36%, #000 66%, transparent 96%); mask-image:linear-gradient(180deg, transparent 36%, #000 66%, transparent 96%); }
+  .seam.l2d .grad { background:linear-gradient(180deg, #F5F4F1 0%, #C8C6BF 16%, #83837F 36%, #43474C 56%, #232830 78%, #161A21 100%); }
+  .seam.l2d .mx1 { background-image:radial-gradient(rgba(22,26,33,0.5) 1.1px, transparent 1.5px); background-size:var(--grid) var(--grid); opacity:.4;
+    -webkit-mask-image:linear-gradient(180deg, transparent 8%, #000 42%, transparent 72%); mask-image:linear-gradient(180deg, transparent 8%, #000 42%, transparent 72%); }
+  .seam.l2d .mx2 { background-image:radial-gradient(rgba(245,244,241,0.5) 1.3px, transparent 1.7px); background-size:var(--grid) var(--grid); opacity:.38;
+    -webkit-mask-image:linear-gradient(180deg, transparent 36%, #000 66%, transparent 96%); mask-image:linear-gradient(180deg, transparent 36%, #000 66%, transparent 96%); }
+
+  /* ---------- MORPH SCENE (pinned scroll-scrubbed: mess -> structure, dusk -> bone) ---------- */
+  .morph-wrap { height:280vh; position:relative; z-index:4; }
+  .morph-sticky { position:sticky; top:0; height:100vh; overflow:hidden; }
+  .morph-sticky canvas { position:absolute; inset:0; width:100%; height:100%; display:block; z-index:0; }
+  .morph-sticky .wash, .morph-sticky .fielddots { z-index:2; }
+  .mcap { position:absolute; opacity:0; max-width:340px; will-change:opacity, transform; z-index:3;
+    text-shadow:0 2px 24px rgba(22,26,33,0.9), 0 0 8px rgba(22,26,33,0.8); }
+  .mcap p { font-family:var(--disp); font-weight:500; font-size:30px; line-height:1.2; letter-spacing:-0.7px; }
+  .mcap .sm { font-family:var(--mono); font-size:11px; letter-spacing:.14em; margin-top:14px; display:block; }
+  .mcap.m1 { left:8%; top:38%; color:var(--td); }
+  .mcap.m2 { right:8%; top:42%; color:var(--td); text-align:right; }
+  .mcap.m3 { left:50%; top:44%; transform:translateX(-50%); color:var(--ink); text-align:center; max-width:560px;
+    text-shadow:0 2px 24px rgba(245,244,241,0.9), 0 0 8px rgba(245,244,241,0.8); }
+  @media (max-width:960px) {
+    .morph-wrap { height:220vh; }
+    .mcap p { font-size:21px; }
+    .mcap.m1 { left:20px; top:20%; } .mcap.m2 { right:20px; top:64%; }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero-sec { position:relative; overflow:hidden; background:var(--dark);
+    min-height:100vh; min-height:100svh; display:flex; flex-direction:column; }
+  .hero-sec > .wrap { flex:1; display:flex; flex-direction:column; width:100%; }
+  .hero { flex:1; display:flex; flex-direction:column; justify-content:center;
+    padding:32px 0 104px; max-width:860px; margin:0 auto; text-align:center; width:100%; }
+  .brandrow { display:flex; justify-content:center; padding:44px 0 0; }
+  .brand-wm { font-size:72px; color:var(--td); }
+  .float-wm { position:fixed; top:22px; left:28px; z-index:60; font-size:26px; color:#fff;
+    mix-blend-mode:difference; opacity:0; pointer-events:none; transition:opacity .4s var(--ease); cursor:pointer; }
+  .float-wm.show { opacity:1; pointer-events:auto; }
+  h1 { font-family:var(--disp); font-weight:500; font-size:54px; line-height:1.06; letter-spacing:-1.4px; margin-bottom:20px; transition:font-size .35s var(--ease); }
+  h1 .glow { position:relative; white-space:nowrap; }
+  h1 .glow::after { content:''; position:absolute; left:-4%; right:-4%; top:8%; bottom:0; background:radial-gradient(60% 90% at 50% 55%, rgba(var(--indigo),0.34), transparent 75%); filter:blur(14px); z-index:-1; }
+  .hero-sub { font-size:17.5px; line-height:1.55; color:var(--td-sub); max-width:460px; margin:0 auto 38px; }
+  .pill { display:flex; align-items:center; border-radius:44px; padding:7px; height:62px; max-width:520px; margin:0 auto; background:#FBFBFA;
+    box-shadow:0 18px 50px rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.12); transition:box-shadow .2s var(--ease); }
+  .pill:focus-within { box-shadow:0 18px 60px rgba(0,0,0,0.45), 0 0 0 4px rgba(var(--indigo),0.28); }
+  .pill input { flex:1; border:none; outline:none; font-size:15.5px; padding:0 18px; background:transparent; color:var(--ink); font-family:var(--sans); min-width:0; }
+  .pill input::placeholder { color:#8A8E96; }
+  .pill button { font-size:15px; font-weight:500; border:none; border-radius:32px; height:48px; padding:0 24px; cursor:pointer; background:var(--dark); color:var(--td); transition:background .2s var(--ease); white-space:nowrap; }
+  .pill button:hover { background:#242B38; }
+  .hero-alt { margin-top:18px; font-size:14px; color:var(--td-mut); }
+  .hero-alt a { color:var(--td-sub); text-decoration:underline; text-underline-offset:3px; }
+
+  /* ---------- INTAKE FLOW ---------- */
+  .hero.ws-open { flex:0 0 auto; justify-content:flex-start; padding:56px 0 16px; }
+  .ws { margin-bottom:80px; }
+  .hero.ws-open .pitch h1 { font-size:30px; letter-spacing:-0.6px; margin-bottom:0; }
+  .hero.ws-open .pitch .hero-sub, .hero.ws-open .pitch .pill, .hero.ws-open .pitch .hero-alt { display:none; }
+  .ws { display:none; position:relative; z-index:3; max-width:780px; margin:0 auto; text-align:left; }
+  .ws.open { display:block; }
+  .ws-card { background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015)); border:1px solid var(--line-d); border-radius:14px; padding:28px 32px 26px; position:relative; margin-top:28px; }
+  .ws-label { font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; color:var(--td-mut); display:block; margin-bottom:16px; }
+  .prog { display:flex; gap:9px; margin-bottom:20px; }
+  .prog i { width:6px; height:6px; border-radius:50%; background:rgba(237,238,242,0.16); transition:background .35s var(--ease), transform .35s var(--ease); }
+  .prog i.on { background:var(--td); }
+  .prog i.now { background:rgba(var(--amber),0.9); transform:scale(1.25); }
+  .wstep { display:none; }
+  .wstep.on { display:block; animation:stepin .4s var(--ease); }
+  @keyframes stepin { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
+  .editor-wrap { position:relative; min-height:190px; }
+  .backdrop, .editor { font-family:var(--sans); font-size:16px; line-height:1.7; padding:2px 0; width:100%; }
+  .backdrop { position:absolute; inset:0; color:var(--td-sub); white-space:pre-wrap; word-wrap:break-word; pointer-events:none; overflow:hidden; }
+  .backdrop .hl { color:var(--td); border-bottom:1px solid rgba(var(--amber),0.6); }
+  .editor { position:relative; z-index:2; background:transparent; border:none; outline:none; resize:none; color:transparent; caret-color:var(--td); min-height:190px; display:block; }
+  .ws-tools { display:flex; align-items:center; gap:18px; margin-top:16px; padding-top:16px; border-top:1px solid var(--line-d); flex-wrap:wrap; }
+  .ws-send { font-size:15px; font-weight:500; border:none; border-radius:32px; height:44px; padding:0 24px; cursor:pointer; background:var(--td); color:var(--dark); font-family:var(--sans); transition:opacity .2s; }
+  .ws-send:hover { opacity:.85; }
+  .ws-esc { font-size:13.5px; color:var(--td-mut); background:none; border:none; cursor:pointer; text-decoration:underline; text-underline-offset:3px; transition:color .2s; font-family:var(--sans); }
+  .ws-esc:hover { color:var(--td-sub); }
+  .parse-dots { display:none; gap:6px; align-items:center; height:6px; }
+  .parse-dots.on { display:flex; }
+  .parse-dots span { width:4px; height:4px; border-radius:50%; background:var(--td-sub); animation:settle 1.6s var(--ease) infinite; }
+  .parse-dots span:nth-child(2){ animation-delay:.1s; } .parse-dots span:nth-child(3){ animation-delay:.2s; }
+  .parse-dots span:nth-child(4){ animation-delay:.3s; } .parse-dots span:nth-child(5){ animation-delay:.4s; }
+  @keyframes settle { 0%{ transform:translateY(0);} 20%{ transform:translateY(-5px);} 40%{ transform:translateY(0);} 100%{ transform:translateY(0);} }
+
+  .fldrow { display:grid; grid-template-columns:1fr 1fr; gap:4px 40px; }
+  .fld { margin-bottom:24px; }
+  .fld label { font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; color:var(--td-mut); display:block; margin-bottom:7px; }
+  .fld label .opt { color:rgba(237,238,242,0.28); }
+  .fld input { width:100%; background:transparent; border:none; border-bottom:1px solid rgba(237,238,242,0.20); border-radius:0; color:var(--td); font-family:var(--sans); font-size:16.5px; padding:5px 0 10px; outline:none; transition:border-color .2s var(--ease); }
+  .fld input:focus { border-color:rgba(237,238,242,0.6); }
+  .fld.bad input { border-color:rgba(229,160,160,0.7); }
+  .seg { display:flex; gap:8px; max-width:340px; }
+  .seg button { flex:1; border:1px solid rgba(237,238,242,0.18); background:none; color:var(--td-sub); border-radius:9px; padding:10px 0; font-size:14px; cursor:pointer; font-family:var(--sans); transition:border-color .2s, color .2s, background .2s; }
+  .seg button.on { border-color:rgba(237,238,242,0.7); color:var(--td); background:rgba(255,255,255,0.06); }
+  .err { display:none; color:#E5A0A0; font-size:12.5px; margin-top:10px; }
+  .err.on { display:block; }
+
+  .rcv-big { font-family:var(--disp); font-weight:500; font-size:26px; letter-spacing:-0.4px; margin:2px 0 16px; animation:stepin .5s var(--ease); }
+  .rcv .doc { border:1px solid var(--line-d); border-radius:12px; padding:20px 24px; margin-bottom:18px; font-size:15px; line-height:1.7; color:var(--td-sub); }
+  .rcv .doc .hl { color:var(--td); border-bottom:1px solid rgba(var(--amber),0.6); }
+  .rcv .meta { font-family:var(--mono); font-size:10.5px; letter-spacing:.13em; color:var(--td-mut); margin-bottom:10px; }
+  .rcv-note { font-size:14.5px; color:var(--td-sub); max-width:480px; line-height:1.6; }
+  .rcv-note span { color:var(--td); }
+
+  /* ---------- LIGHT BODY ---------- */
+  .body-sec { position:relative; overflow:hidden; background:var(--bone); color:var(--ink); }
+  .body-sec .noise { opacity:.35; }
+  .marq-band { padding:36px 0 8px; }
+  .band-label { font-family:var(--mono); font-size:11px; letter-spacing:.16em; color:var(--ink-sub); margin-bottom:22px; text-align:center; }
+  .marquee { overflow:hidden; position:relative;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); }
+  .marq-track { display:flex; gap:12px; width:max-content; animation:marq 44s linear infinite; }
+  .marquee:hover .marq-track { animation-play-state:paused; }
+  @keyframes marq { to { transform:translateX(-50%); } }
+  .tile { background:rgba(255,255,255,0.75); border:1px solid var(--line-l); border-radius:12px; padding:18px 22px; width:300px; flex:none; transition:border-color .2s var(--ease), transform .2s var(--ease); }
+  .tile:hover { border-color:rgba(29,32,37,0.25); transform:translateY(-2px); }
+  .tile .t { font-size:14.5px; font-weight:500; line-height:1.4; }
+  .tile .m { font-family:var(--mono); font-size:12px; color:var(--ink-sub); margin-top:10px; }
+
+  .sec-head { text-align:center; padding:114px 0 0; }
+  .label { display:inline-flex; align-items:center; gap:8px; font-size:15px; margin-bottom:16px; }
+  .label::before { content:''; width:6px; height:6px; border-radius:50%; background:rgb(var(--indigo)); }
+  h2 { font-family:var(--disp); font-weight:500; font-size:44px; line-height:1.1; letter-spacing:-1.2px; max-width:780px; margin:0 auto 16px; }
+  .sec-sub { font-size:17px; line-height:1.55; color:var(--ink-sub); max-width:540px; margin:0 auto; }
+  .on-dark .sec-sub, .dusk-cta .sec-sub { color:var(--td-sub); }
+
+  .steps-belt { padding:110px 0 110px; }
+  .steps { border-top:1px solid rgba(29,32,37,0.16); max-width:1000px; margin:52px auto 0; }
+  .step { display:grid; grid-template-columns:90px 1fr 1.25fr; gap:40px; padding:30px 0; border-bottom:1px solid rgba(29,32,37,0.16); align-items:baseline; }
+  .step .n { font-family:var(--mono); font-size:13px; color:var(--ink-sub); }
+  .step h3 { font-family:var(--disp); font-weight:500; font-size:21px; letter-spacing:-0.3px; }
+  .step p { font-size:15.5px; color:var(--ink-sub); line-height:1.55; }
+
+  .dusk-cta { position:relative; overflow:hidden; text-align:center; padding:20px 0 150px; background:var(--bone); color:var(--ink); }
+  .dusk-cta h2 { color:var(--ink); }
+  .dusk-cta .sec-sub { color:var(--ink-sub); }
+  .dusk-cta .pill { margin:40px auto 0; box-shadow:0 6px 24px rgba(26,26,26,0.10); border:1px solid rgba(29,32,37,0.14); }
+  .dusk-cta .pill button { background:var(--ink); }
+  .dusk-cta .below { margin-top:20px; font-size:14px; color:var(--ink-sub); }
+
+  /* ---------- DARK BAND ---------- */
+  .dark-band { position:relative; background:var(--bone); padding:0 0 120px; }
+  .dark-panel { position:relative; overflow:hidden; background:var(--dark); color:var(--td); border-radius:28px; padding:96px 64px 60px; }
+  .dark-panel .label { color:var(--td); }
+  .dark-panel h2 { color:var(--td); }
+  .dark-panel .sec-sub { color:var(--td-sub); }
+  .dcards { display:grid; grid-template-columns:1.2fr 1fr; gap:16px; margin-top:60px; text-align:left; }
+  .dcards2 { display:grid; grid-template-columns:1fr 1.2fr; gap:16px; margin-top:16px; text-align:left; }
+  .dcard { background:rgba(255,255,255,0.035); border:1px solid var(--line-d); border-radius:16px; padding:40px 38px 42px; transition:border-color .25s var(--ease); position:relative; overflow:hidden; }
+  .dcard:hover { border-color:rgba(237,238,242,0.22); }
+  .dcard h3 { font-family:var(--disp); font-weight:500; font-size:24px; letter-spacing:-0.4px; margin-bottom:12px; }
+  .dcard p { font-size:15.5px; line-height:1.55; color:var(--td-sub); max-width:440px; }
+  .dcard .mono-list { margin-top:26px; font-family:var(--mono); font-size:12.5px; line-height:2.15; color:var(--td-sub); }
+  .dcard .mono-list b { color:#B9C4F2; font-weight:500; }
+  .dcard .cdots { position:absolute; right:-30px; bottom:-30px; width:200px; height:140px; opacity:.3;
+    background-image:radial-gradient(rgba(237,238,242,0.7) 1.1px, transparent 1.5px); background-size:var(--grid) var(--grid); background-attachment:fixed;
+    -webkit-mask-image:linear-gradient(225deg,#000 30%,transparent 85%); mask-image:linear-gradient(225deg,#000 30%,transparent 85%); }
+
+  .rot-band { position:relative; z-index:3; padding:80px 0 20px; }
+  .rot-tabs { display:flex; gap:10px; max-width:900px; margin:0 auto 50px; }
+  .rot-tab { flex:1; cursor:pointer; padding-top:14px; border-top:2px solid rgba(237,238,242,0.14); position:relative;
+    font-family:var(--mono); font-size:11px; letter-spacing:.1em; color:var(--td-mut); text-align:left; background:none; border-left:none; border-right:none; border-bottom:none; transition:color .3s; }
+  .rot-tab .bar { position:absolute; top:-2px; left:0; height:2px; width:0; background:#B9C4F2; }
+  .rot-tab.active { color:var(--td-sub); }
+  .rot-stage { text-align:center; max-width:860px; margin:0 auto; position:relative; min-height:150px; }
+  .rot-item { position:absolute; inset:0; opacity:0; transition:opacity .28s var(--ease); }
+  .rot-item.active { opacity:1; }
+  .rot-item .q { font-family:var(--disp); font-weight:500; font-size:32px; line-height:1.22; letter-spacing:-0.8px; color:var(--td); }
+  .rot-item .att { margin-top:20px; font-family:var(--mono); font-size:12px; letter-spacing:.1em; color:var(--td-mut); }
+
+  /* ---------- CLOSE ---------- */
+  .close-belt { position:relative; background:var(--bone); padding:0 0 0; overflow:hidden; }
+  .close-card { position:relative; overflow:hidden; background:var(--dark); border-radius:28px; text-align:center; padding:88px 64px; color:var(--td); }
+  .close-card h2 { color:var(--td); margin-bottom:14px; }
+  .close-card .sec-sub { color:var(--td-sub); margin-bottom:36px; }
+  .close-card .pill { margin:0 auto; }
+  .close-alt { margin-top:18px; font-size:14px; color:var(--td-mut); position:relative; z-index:3; }
+  .close-alt a { color:var(--td-sub); text-decoration:underline; text-underline-offset:3px; }
+
+  .foot-giant { text-align:center; padding:90px 0 10px; overflow:hidden; }
+  .foot-giant .gword { font-family:var(--disp); font-weight:500; letter-spacing:-0.02em; font-size:clamp(120px, 22vw, 280px); line-height:.86;
+    background-image:radial-gradient(rgba(29,32,37,0.72) 2px, transparent 2.6px); background-size:11px 11px;
+    -webkit-background-clip:text; background-clip:text; color:transparent; }
+  footer { background:var(--bone); color:var(--ink); padding:30px 0 40px; position:relative; z-index:3; }
+  .foot-row { display:flex; justify-content:space-between; align-items:baseline; border-top:1px solid rgba(29,32,37,0.12); padding-top:28px; }
+  .foot-links { display:flex; gap:28px; font-size:14.5px; color:var(--ink-sub); }
+  .legal { font-size:13px; color:var(--ink-sub); }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 960px) {
+    .wrap { padding:0 20px; }
+    .hero { padding:24px 0 72px; }
+    .brandrow { padding:30px 0 0; }
+    .brand-wm { font-size:46px; }
+    .float-wm { top:16px; left:18px; font-size:22px; }
+    h1 { font-size:38px; letter-spacing:-1px; }
+    .fldrow { grid-template-columns:1fr; }
+    h2 { font-size:31px; letter-spacing:-0.7px; }
+    .step { grid-template-columns:44px 1fr; gap:14px; }
+    .step p { grid-column:2; }
+    .dcards, .dcards2 { grid-template-columns:1fr; }
+    .rot-tabs { flex-wrap:wrap; }
+    .rot-tab { min-width:40%; }
+    .rot-item .q { font-size:22px; }
+    .close-card { padding:56px 24px; }
+    .dark-panel { padding:56px 22px 40px; border-radius:20px; }
+    .foot-row { flex-direction:column; gap:16px; }
+    .fielddots, .wash, .seam .mx1, .seam .mx2 { background-attachment:scroll; }
+  }
+</style>
+</head>
+<body>
+
+
+<span class="wm float-wm wm-anim" id="floatWm" title="Back to top"><span class="gslot"><span class="ghost">g</span></span>rain</span>
+
+<section class="hero-sec on-dark">
+  <div class="wash"></div><div class="fielddots"></div><div class="noise"></div>
+  <div class="wrap">
+    <div class="brandrow"><span class="wm brand-wm wm-anim" id="navWm"><span class="gslot"><span class="ghost">g</span></span>rain</span></div>
+    <div class="hero" id="hero">
+      <div class="pitch">
+        <h1 id="heroH1">Tell us what you need done. <span class="glow">We take it from there.</span></h1>
+        <p class="hero-sub">Grain scopes it, staffs it with operators and AI, and delivers it. One fixed price, quoted within a business day.</p>
+        <div class="pill">
+          <input type="text" id="heroInput" placeholder="Describe the project — rough is fine" autocomplete="off">
+          <button data-open-ws data-seed="heroInput">Get it scoped</button>
+        </div>
+        <p class="hero-alt">or text us at <a href="sms:+15125550134">(512) 555-0134</a></p>
+      </div>
+
+    </div>
+
+    <!-- intake flow -->
+    <div class="ws" id="ws">
+      <div class="ws-card">
+        <div class="prog" aria-hidden="true"><i id="pg1"></i><i id="pg2"></i><i id="pg3"></i></div>
+
+        <div class="wstep" id="step1">
+          <span class="ws-label">THE PROJECT — SAY IT IN PLAIN LANGUAGE. ROUGH IS FINE.</span>
+          <div class="editor-wrap">
+            <div class="backdrop" id="backdrop"></div>
+            <textarea class="editor" id="editor" spellcheck="false" placeholder="we need to..."></textarea>
+          </div>
+          <div class="ws-tools">
+            <button class="ws-send" id="toStep2">Continue</button>
+            <div class="parse-dots" id="parseDots"><span></span><span></span><span></span><span></span><span></span></div>
+            <a class="ws-esc" id="smsLink" href="sms:+15125550134">text this to us instead</a>
+            <button class="ws-esc" id="wsClose">close</button>
+          </div>
+          <div class="err" id="err1">Tell us a little more first.</div>
+        </div>
+
+        <div class="wstep" id="step2">
+          <span class="ws-label">WHERE THE QUOTE GOES</span>
+          <div class="fldrow">
+            <div class="fld"><label for="fName">NAME</label><input id="fName" autocomplete="name"></div>
+            <div class="fld"><label for="fEmail">WORK EMAIL</label><input id="fEmail" type="email" autocomplete="email" inputmode="email"></div>
+            <div class="fld"><label for="fPhone">PHONE</label><input id="fPhone" type="tel" autocomplete="tel" inputmode="tel"></div>
+            <div class="fld"><label for="fCo">COMPANY <span class="opt">· OPTIONAL</span></label><input id="fCo" autocomplete="organization"></div>
+          </div>
+          <div class="fld">
+            <label>HOW SHOULD WE REACH YOU?</label>
+            <div class="seg" id="prefSeg">
+              <button type="button" data-pref="text" class="on">Text</button>
+              <button type="button" data-pref="call">Call</button>
+              <button type="button" data-pref="email">Email</button>
+            </div>
+          </div>
+          <div class="ws-tools">
+            <button class="ws-send" id="submitBtn">Send to Grain</button>
+            <button class="ws-esc" id="backBtn">back</button>
+          </div>
+          <div class="err" id="err2"></div>
+        </div>
+
+        <div class="wstep rcv" id="step3">
+          <span class="ws-label">RECEIVED</span>
+          <div class="rcv-big">Received.</div>
+          <div class="doc">
+            <div class="meta" id="rcvMeta"></div>
+            <div id="rcvText"></div>
+          </div>
+          <p class="rcv-note">We'll email a fixed quote to <span id="rcvName"></span> within one business day. <span id="rcvReach"></span></p>
+          <div class="ws-tools"><button class="ws-esc" id="doneClose">close</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="morph-wrap" id="morphWrap">
+  <div class="morph-sticky">
+    <canvas id="morphCanvas"></canvas>
+    <div class="wash"></div>
+    <div class="fielddots" id="mfLight" style="background-image:radial-gradient(rgba(237,238,242,0.55) 0.8px, transparent 1.2px); opacity:.10;"></div>
+    <div class="fielddots" id="mfInk" style="background-image:radial-gradient(rgba(29,32,37,0.5) 0.8px, transparent 1.2px); opacity:0;"></div>
+    <div class="noise"></div>
+    <div class="mcap m1"><p>Send a rough description.</p><span class="sm">TYPED, TEXTED, OR TALKED THROUGH</span></div>
+    <div class="mcap m2"><p>Get back a priced plan.</p><span class="sm">ONE PAGE, ONE PRICE</span></div>
+    <div class="mcap m3"><p>Approve it, and we get to work.</p></div>
+  </div>
+</div>
+
+<section class="body-sec on-light">
+  <div class="wash"></div><div class="fielddots"></div><div class="noise"></div>
+
+  <div class="wrap" style="max-width:100%; padding:0;">
+    <div class="marq-band" id="projects">
+      <div class="band-label rv">THE KIND OF WORK WE TAKE</div>
+      <div class="marquee rv rv2">
+        <div class="marq-track" id="marqTrack">
+          <div class="tile"><div class="t">Migrate 400 restaurant menus into a new POS</div><div class="m">$4–6K · 3 weeks</div></div>
+          <div class="tile"><div class="t">Stand up and run an outbound pipeline</div><div class="m">$5–8K · 4 weeks</div></div>
+          <div class="tile"><div class="t">Build and staff a customer onboarding process</div><div class="m">$6–10K · ongoing</div></div>
+          <div class="tile"><div class="t">Clean and reconcile two years of CRM data</div><div class="m">$3–5K · 2 weeks</div></div>
+          <div class="tile"><div class="t">Research and shortlist 80 acquisition targets</div><div class="m">$5–7K · 3 weeks</div></div>
+          <div class="tile"><div class="t">Run a vendor migration across 6 internal tools</div><div class="m">$6–9K · 5 weeks</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="steps-belt" id="how">
+      <div class="sec-head" style="padding-top:0;">
+        <span class="label rv">How it works</span>
+        <h2 class="rv rv2">One conversation starts the project</h2>
+      </div>
+      <div class="steps">
+        <div class="step rv"><span class="n">01</span><h3>Describe it</h3><p>Type it, text it, or talk it through on a short call. Ambiguity is our job, not yours.</p></div>
+        <div class="step rv rv2"><span class="n">02</span><h3>Approve the quote</h3><p>A one-page plan comes back: what we'll do, what it costs, when it lands. Nothing starts until you sign off.</p></div>
+        <div class="step rv rv3"><span class="n">03</span><h3>Receive finished work</h3><p>Grain staffs the project with operators and AI, and reviews every deliverable before it reaches you.</p></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="dusk-cta on-light">
+  <div class="fielddots"></div>
+  <div class="wrap">
+    <h2 class="rv">See what your project costs</h2>
+    <p class="sec-sub rv rv2">One sentence is enough to start.</p>
+    <div class="pill rv rv3" style="max-width:520px;">
+      <input type="text" id="midInput" placeholder="Describe the project — rough is fine" autocomplete="off">
+      <button data-open-ws data-seed="midInput">Get it scoped</button>
+    </div>
+  </div>
+</section>
+
+<section class="dark-band" id="model">
+  <div class="wrap">
+  <div class="dark-panel on-dark">
+  <div class="wash"></div><div class="fielddots"></div><div class="noise"></div>
+  <div style="text-align:center; position:relative; z-index:3;">
+    <span class="label rv">The model</span>
+    <h2 class="rv rv2">Who does the work</h2>
+    <p class="sec-sub rv rv3" style="max-width:520px;">Operators and AI on one team, assigned task by task. You get the deliverable; we run everything behind it.</p>
+    <div class="dcards">
+      <div class="dcard rv">
+        <div class="cdots"></div>
+        <h3>We run the coordination</h3>
+        <p>Multi-part projects fail in the handoffs. Grain runs the plan, the staffing, and the review, so nothing falls between people.</p>
+        <div class="mono-list">
+          <div><b>SCOPE</b> — workstreams &amp; dependencies mapped</div>
+          <div><b>STAFF</b> — vetted operators + AI, assigned by task</div>
+          <div><b>QA</b> — every deliverable reviewed before you see it</div>
+        </div>
+      </div>
+      <div class="dcard rv rv2">
+        <h3>Fixed price</h3>
+        <p>Quoted before work begins, never hourly. The price you approve is the price you pay.</p>
+      </div>
+    </div>
+    <div class="dcards2">
+      <div class="dcard rv"><h3>What's too small</h3><p>If it fits in one person's afternoon, you don't need us. Grain takes projects with several moving parts and a real deadline.</p></div>
+      <div class="dcard rv rv2">
+        <div class="cdots"></div>
+        <h3>Not a marketplace</h3>
+        <p>You never see a profile or manage a contractor. Grain hires and supervises everyone on your project.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="rot-band">
+    <div>
+      <div class="rot-tabs rv" id="rotTabs">
+        <button class="rot-tab" data-rot="0"><span class="bar"></span>OPERATIONS</button>
+        <button class="rot-tab" data-rot="1"><span class="bar"></span>GROWTH</button>
+        <button class="rot-tab" data-rot="2"><span class="bar"></span>DATA</button>
+        <button class="rot-tab" data-rot="3"><span class="bar"></span>COORDINATION</button>
+      </div>
+      <div class="rot-stage rv rv2" id="rotStage">
+        <div class="rot-item"><p class="q">"Onboard 40 restaurants by March. Menus, configs, owner calls, all of it."</p><p class="att">THE SHAPE OF AN OPERATIONS PROJECT</p></div>
+        <div class="rot-item"><p class="q">"Build the outbound machine. Lists, sequences, replies routed to our AEs."</p><p class="att">THE SHAPE OF A GROWTH PROJECT</p></div>
+        <div class="rot-item"><p class="q">"Two years of CRM chaos. Make the data trustworthy again."</p><p class="att">THE SHAPE OF A DATA PROJECT</p></div>
+        <div class="rot-item"><p class="q">"Six tools, one migration, forty stakeholders. Just make it happen."</p><p class="att">THE SHAPE OF A COORDINATION PROJECT</p></div>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+  </div>
+</section>
+
+<section class="close-belt on-light" id="start">
+  <div class="fielddots"></div>
+  <div class="wrap">
+    <div class="close-card rv">
+      <div class="wash"></div><div class="noise"></div>
+      <div style="position:relative; z-index:3;">
+        <h2>What do you need done?</h2>
+        <p class="sec-sub">Fixed quote within one business day. No commitment until you approve the scope.</p>
+        <div class="pill" style="max-width:520px;">
+          <input type="text" id="closeInput" placeholder="Describe the project — rough is fine" autocomplete="off">
+          <button data-open-ws data-seed="closeInput">Get it scoped</button>
+        </div>
+        <p class="close-alt">or text us at <a href="sms:+15125550134">(512) 555-0134</a></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot-giant"><div class="gword">grain</div></div>
+
+  <footer>
+    <div class="wrap">
+      <div class="foot-row">
+        <span class="wm" style="font-size:17px;">grain</span>
+        <span class="foot-links"><a href="#how">How it works</a><a href="#projects">Projects</a><a href="#model">The model</a><a href="sms:+15125550134">Text us</a></span>
+        <span class="legal">© Grain Inc. 2026 · hiregrain.com</span>
+      </div>
+    </div>
+  </footer>
+</section>
+
+<script>
+/* ============ WORDMARK: frozen FILL A ============ */
+const FILLA = {"adv":0.573,"r":0.0125,"dots":[[0.4793,-0.5836],[0.521,-0.5836],[0.4585,-0.5475],[0.5001,-0.5475],[0.1877,-0.5114],[0.2293,-0.5115],[0.271,-0.5115],[0.3126,-0.5115],[0.3543,-0.5115],[0.4376,-0.5115],[0.4793,-0.5115],[0.1251,-0.4754],[0.1668,-0.4754],[0.2085,-0.4754],[0.2501,-0.4756],[0.3335,-0.4754],[0.3751,-0.4754],[0.4168,-0.4754],[0.1043,-0.4393],[0.146,-0.4393],[0.396,-0.4393],[0.4376,-0.4393],[0.0835,-0.4032],[0.1251,-0.4032],[0.4168,-0.4032],[0.4585,-0.4032],[0.1043,-0.3671],[0.146,-0.3671],[0.4376,-0.3671],[0.4793,-0.3671],[0.0835,-0.331],[0.1251,-0.331],[0.4168,-0.331],[0.4585,-0.331],[0.1043,-0.295],[0.146,-0.295],[0.396,-0.295],[0.4376,-0.295],[0.1251,-0.2589],[0.1668,-0.2589],[0.2085,-0.2589],[0.3751,-0.2589],[0.4168,-0.2589],[0.146,-0.2228],[0.1876,-0.2228],[0.2293,-0.2228],[0.271,-0.2228],[0.3126,-0.2228],[0.3543,-0.2228],[0.3958,-0.2234],[0.0835,-0.1866],[0.1251,-0.1867],[0.0626,-0.1506],[0.1043,-0.1506],[0.0835,-0.1145],[0.1251,-0.1145],[0.1043,-0.0785],[0.146,-0.0785],[0.1876,-0.0785],[0.2293,-0.0785],[0.271,-0.0785],[0.3126,-0.0785],[0.3543,-0.0785],[0.396,-0.0785],[0.4376,-0.0785],[0.4793,-0.0785],[0.1251,-0.0424],[0.1668,-0.0424],[0.2085,-0.0424],[0.2501,-0.0424],[0.2918,-0.0424],[0.3335,-0.0424],[0.3751,-0.0424],[0.4168,-0.0424],[0.4585,-0.0424],[0.5001,-0.0424],[0.0626,-0.0063],[0.1043,-0.0063],[0.4793,-0.0063],[0.521,-0.0063],[0.0418,0.0298],[0.0835,0.0298],[0.5001,0.0298],[0.5417,0.0298],[0.0626,0.0659],[0.1043,0.0659],[0.4793,0.0659],[0.521,0.0659],[0.0418,0.102],[0.0835,0.102],[0.1251,0.102],[0.4585,0.102],[0.5001,0.102],[0.1043,0.138],[0.146,0.138],[0.1876,0.138],[0.2293,0.138],[0.271,0.138],[0.3126,0.138],[0.3543,0.138],[0.396,0.138],[0.4376,0.138],[0.4792,0.138]]};
+
+function gSVG(color, animate, rScale, dots) {
+  const EM = 480, TOP = 0.82, R = FILLA.r * EM * (rScale || 1);
+  const circles = (dots || FILLA.dots).map(([x, y], i) => {
+    const d = animate ? ` style="transition-delay:${(i * 9)}ms"` : '';
+    return `<circle cx="${(x * EM).toFixed(1)}" cy="${(y * EM + TOP * EM).toFixed(1)}" r="${R.toFixed(1)}"${d}/>`;
+  }).join('');
+  return `<svg viewBox="0 0 ${(FILLA.adv * EM).toFixed(0)} ${EM}" preserveAspectRatio="xMinYMin meet" aria-hidden="true"><g fill="${color}">${circles}</g></svg>`;
+}
+document.querySelector('#navWm .gslot').insertAdjacentHTML('beforeend', gSVG('#EDEEF2', true, 1.35));
+requestAnimationFrame(() => requestAnimationFrame(() => document.getElementById('navWm').classList.add('assembled')));
+const floatWm = document.getElementById('floatWm');
+floatWm.querySelector('.gslot').insertAdjacentHTML('beforeend', gSVG('#EDEEF2', true, 1.9));
+floatWm.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
+let floatOn = false;
+addEventListener('scroll', () => {
+  const want = scrollY > innerHeight * 0.85;
+  if (want !== floatOn) {
+    floatOn = want;
+    floatWm.classList.toggle('show', want);
+    floatWm.classList.remove('assembled');
+    if (want) requestAnimationFrame(() => requestAnimationFrame(() => floatWm.classList.add('assembled')));
+  }
+}, { passive: true });
+
+/* favicon = the g alone on dark */
+(function(){
+  const EM = 480;
+  const circles = FILLA.dots.map(([x,y]) => `<circle cx='${(x*EM+80).toFixed(0)}' cy='${(y*EM+400).toFixed(0)}' r='${(FILLA.r*EM+3).toFixed(0)}'/>`).join('');
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 440 480'><rect width='440' height='480' rx='72' fill='%23161A21'/><g fill='%23EDEEF2'>${circles}</g></svg>`;
+  const link = document.createElement('link'); link.rel = 'icon'; link.href = `data:image/svg+xml,${svg}`;
+  document.head.appendChild(link);
+})();
+
+/* ============ REVEALS ============ */
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .15 });
+document.querySelectorAll('.rv').forEach(el => io.observe(el));
+
+/* ============ MARQUEE ============ */
+const track = document.getElementById('marqTrack');
+track.innerHTML += track.innerHTML;
+
+/* ============ INTAKE FLOW ============ */
+const hero = document.getElementById('hero');
+const ws = document.getElementById('ws');
+const editor = document.getElementById('editor');
+const backdrop = document.getElementById('backdrop');
+const parseDots = document.getElementById('parseDots');
+const heroH1 = document.getElementById('heroH1');
+const steps = [document.getElementById('step1'), document.getElementById('step2'), document.getElementById('step3')];
+const pgs = [document.getElementById('pg1'), document.getElementById('pg2'), document.getElementById('pg3')];
+let stepIdx = 0, pref = 'text', submitted = false;
+
+function setStep(i) {
+  stepIdx = i;
+  steps.forEach((el, k) => el.classList.toggle('on', k === i));
+  pgs.forEach((el, k) => { el.classList.toggle('on', k < i); el.classList.toggle('now', k === i); });
+  if (i === 0) setTimeout(() => editor.focus(), 60);
+  if (i === 1) setTimeout(() => document.getElementById('fName').focus(), 60);
+}
+function openWS(seedText) {
+  hero.classList.add('ws-open');
+  ws.classList.add('open');
+  heroH1.innerHTML = 'What do you need done?';
+  if (seedText) { editor.value = seedText; }
+  if (!submitted) setStep(stepIdx === 2 ? 2 : stepIdx);
+  schedule();
+  scrollTo({ top: 0, behavior: 'smooth' });
+  if (stepIdx === 0) setTimeout(() => editor.focus(), 350);
+}
+function closeWS() {
+  hero.classList.remove('ws-open');
+  ws.classList.remove('open');
+  heroH1.innerHTML = 'Tell us what you need done. <span class="glow">We take it from there.</span>';
+}
+document.querySelectorAll('[data-open-ws]').forEach(b => b.addEventListener('click', () => {
+  const seedId = b.getAttribute('data-seed');
+  openWS(seedId ? document.getElementById(seedId).value.trim() : '');
+}));
+document.getElementById('heroInput').addEventListener('focus', function () { openWS(this.value.trim()); });
+/* hero placeholder cycles real project shapes */
+(function () {
+  const inp = document.getElementById('heroInput');
+  const EX = [
+    'Describe the project \u2014 rough is fine',
+    'Migrate 400 restaurant menus into a new POS\u2026',
+    'Clean up two years of CRM data\u2026',
+    'Build and staff our customer onboarding\u2026',
+    'Research and shortlist 80 acquisition targets\u2026'
+  ];
+  let i = 0;
+  setInterval(() => {
+    if (document.activeElement === inp || inp.value) return;
+    i = (i + 1) % EX.length;
+    inp.placeholder = EX[i];
+  }, 3400);
+})();
+document.getElementById('wsClose').addEventListener('click', closeWS);
+document.getElementById('doneClose').addEventListener('click', closeWS);
+addEventListener('keydown', e => { if (e.key === 'Escape' && ws.classList.contains('open')) closeWS(); });
+
+/* ---- acknowledgment underlines (no analysis, no output) ---- */
+const HL_RES = [
+  /(onboard\w*|set ?up|implement\w*|launch\w*|migrat\w*|reconcil\w*|clean\w*|coordinat\w*|chase\w*|schedul\w*|research\w*|shortlist|hire|hiring|recruit\w*|outbound|pipeline|data entry|follow.?ups?)/gi,
+  /~?\d[\d,]*\+?\s*[a-z]*/gi,
+  /(week|month|quarter|by\s+\w+|asap|deadline|q[1-4]\b|jan\w*|feb\w*|mar\w*|apr\w*|may|jun\w*|jul\w*|aug\w*|sep\w*|oct\w*|nov\w*|dec\w*)/gi
+];
+function findHighlights(text) {
+  const out = [];
+  for (const re of HL_RES) {
+    re.lastIndex = 0; let m;
+    while ((m = re.exec(text)) && out.length < 14) { if (m[0].length > 2) out.push(m[0]); }
+  }
+  return out;
+}
+function esc(x) { return x.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function markUp(text, highlights) {
+  let html = esc(text);
+  const done = new Set();
+  highlights.forEach(h => {
+    const k = h.toLowerCase(); if (done.has(k)) return; done.add(k);
+    const re = new RegExp(h.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+    html = html.replace(re, m => `<span class="hl">${m}</span>`);
+  });
+  return html;
+}
+let parseTimer = null;
+function schedule() {
+  backdrop.innerHTML = esc(editor.value) + '\n';
+  clearTimeout(parseTimer);
+  if (editor.value.trim().length < 8) return;
+  parseDots.classList.add('on');
+  parseTimer = setTimeout(() => {
+    parseDots.classList.remove('on');
+    backdrop.innerHTML = markUp(editor.value, findHighlights(editor.value)) + '\n';
+    document.getElementById('smsLink').href = 'sms:+15125550134?&body=' + encodeURIComponent(editor.value.slice(0, 800));
+  }, 700);
+}
+editor.addEventListener('input', schedule);
+editor.addEventListener('scroll', () => { backdrop.scrollTop = editor.scrollTop; });
+
+/* ---- step navigation ---- */
+document.getElementById('toStep2').addEventListener('click', () => {
+  const ok = editor.value.trim().length >= 12;
+  document.getElementById('err1').classList.toggle('on', !ok);
+  if (ok) setStep(1);
+});
+document.getElementById('backBtn').addEventListener('click', () => setStep(0));
+document.querySelectorAll('#prefSeg button').forEach(b => b.addEventListener('click', () => {
+  pref = b.getAttribute('data-pref');
+  document.querySelectorAll('#prefSeg button').forEach(x => x.classList.toggle('on', x === b));
+}));
+
+function fieldOk(id, test) {
+  const inp = document.getElementById(id);
+  const ok = test(inp.value.trim());
+  inp.closest('.fld').classList.toggle('bad', !ok);
+  return ok;
+}
+document.getElementById('submitBtn').addEventListener('click', () => {
+  const okName = fieldOk('fName', v => v.length >= 2);
+  const okEmail = fieldOk('fEmail', v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v));
+  const okPhone = fieldOk('fPhone', v => v.replace(/\D/g, '').length >= 7);
+  const err2 = document.getElementById('err2');
+  if (!(okName && okEmail && okPhone)) {
+    err2.textContent = !okEmail ? 'That email doesn\u2019t look right.' : (!okPhone ? 'That phone number doesn\u2019t look right.' : 'Your name goes there.');
+    err2.classList.add('on');
+    return;
+  }
+  err2.classList.remove('on');
+  submitted = true;
+  const record = {
+    text: editor.value.trim(),
+    name: document.getElementById('fName').value.trim(),
+    email: document.getElementById('fEmail').value.trim(),
+    phone: document.getElementById('fPhone').value.trim(),
+    company: document.getElementById('fCo').value.trim(),
+    pref, at: new Date().toISOString()
+  };
+  try {
+    const subs = JSON.parse(localStorage.getItem('grain_submissions') || '[]');
+    subs.push(record);
+    localStorage.setItem('grain_submissions', JSON.stringify(subs));
+  } catch (e) {}
+  const d = new Date();
+  const MON = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  document.getElementById('rcvMeta').textContent = `RECEIVED \u00B7 ${MON[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}${record.company ? ' \u00B7 ' + record.company.toUpperCase() : ''}`;
+  document.getElementById('rcvText').innerHTML = markUp(record.text, findHighlights(record.text));
+  document.getElementById('rcvName').textContent = record.email;
+  document.getElementById('rcvReach').textContent =
+    pref === 'text' ? `If anything needs clarifying first, we\u2019ll text ${record.phone}.` :
+    pref === 'call' ? `If anything needs clarifying first, we\u2019ll call ${record.phone}.` :
+    'If anything needs clarifying first, we\u2019ll email you.';
+  setStep(2);
+});
+
+/* ============ MORPH ENGINE (scroll-scrubbed) ============ */
+(function () {
+  const wrap = document.getElementById('morphWrap');
+  const cv = document.getElementById('morphCanvas');
+  const ctx = cv.getContext('2d');
+  const caps = [document.querySelector('.mcap.m1'), document.querySelector('.mcap.m2'), document.querySelector('.mcap.m3')];
+  const mfLight = document.getElementById('mfLight'), mfInk = document.getElementById('mfInk');
+  const DARK = [22, 26, 33], BONE = [245, 244, 241], LIGHTDOT = [237, 238, 242], INKDOT = [29, 32, 37];
+  const AMB = [232, 179, 107];
+  let W = 0, H = 0, dpr = 1, grains = [];
+  let seed = 7;
+  const rnd = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+  function build() {
+    dpr = Math.min(devicePixelRatio || 1, 2);
+    W = cv.clientWidth; H = cv.clientHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    seed = 7; grains = [];
+    const GAP = 22, HALF = 11;
+    const spanX = 0.96, spanY = 0.88;
+    const c0 = Math.round((W * (1 - spanX) / 2 - HALF) / GAP), c1 = Math.round((W * (1 + spanX) / 2 - HALF) / GAP);
+    const r0 = Math.round((H * (1 - spanY) / 2 - HALF) / GAP), r1 = Math.round((H * (1 + spanY) / 2 - HALF) / GAP);
+    for (let r = r0; r <= r1; r++) {
+      for (let c = c0; c <= c1; c++) {
+        if (rnd() < 0.18) continue;
+        grains.push({
+          sx: rnd() * W, sy: rnd() * H,
+          tx: HALF + c * GAP, ty: HALF + r * GAP,
+          d: rnd() * 0.22, r: 1.1 + rnd() * 0.9,
+          w: rnd()
+        });
+      }
+    }
+  }
+  const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const clamp01 = v => Math.max(0, Math.min(1, v));
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const mix = (c1, c2, t) => `rgb(${Math.round(lerp(c1[0], c2[0], t))},${Math.round(lerp(c1[1], c2[1], t))},${Math.round(lerp(c1[2], c2[2], t))})`;
+  const win = (p, a, b, c, d) => clamp01((p - a) / (b - a)) * (1 - clamp01((p - c) / (d - c)));
+  let lastP = -1;
+  function frame() {
+    const vh = innerHeight;
+    const rect = wrap.getBoundingClientRect();
+    const total = wrap.offsetHeight - vh;
+    const p = clamp01(-rect.top / total);
+    if (rect.top < vh && rect.bottom > 0 && (p !== lastP || p === 0)) {
+      lastP = p;
+      const t = ease(clamp01((p - 0.70) / 0.24));
+      const WARM = [124, 116, 102];
+      const bg = t < 0.5 ? mix(DARK, WARM, t * 2) : mix(WARM, BONE, (t - 0.5) * 2);
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, W, H);
+      const bell = t * (1 - t) * 4;
+      if (bell > 0.01) {
+        const g2 = ctx.createRadialGradient(W * 0.5, H * 0.85, 0, W * 0.5, H * 0.85, W * 0.7);
+        g2.addColorStop(0, `rgba(${AMB[0]},${AMB[1]},${AMB[2]},${0.16 * bell})`); g2.addColorStop(1, 'transparent');
+        ctx.fillStyle = g2; ctx.fillRect(0, 0, W, H);
+      }
+      mfLight.style.opacity = (0.10 * (1 - t)).toFixed(3);
+      mfInk.style.opacity = (0.09 * t).toFixed(3);
+      const move = clamp01(p / 0.88);
+      for (const g of grains) {
+        const intro = ease(clamp01((p - 0.02 - g.d * 0.35) / 0.16));
+        if (intro <= 0) continue;
+        const q = ease(clamp01((move - g.d) / 0.66));
+        const x = lerp(g.sx, g.tx, q), y = lerp(g.sy, g.ty, q);
+        ctx.fillStyle = (g.w > 0.99 && q > 0.9) ? mix(AMB, [143, 95, 30], t) : mix(LIGHTDOT, INKDOT, t);
+        const handoff = ease(clamp01((p - 0.94) / 0.06));
+        ctx.globalAlpha = (0.4 + 0.6 * q) * intro * (1 - handoff * 0.75);
+        ctx.beginPath(); ctx.arc(x, y, lerp(g.r, 0.9, handoff), 0, 6.2832); ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      caps[0].style.opacity = win(p, 0.10, 0.18, 0.34, 0.44);
+      caps[1].style.opacity = win(p, 0.40, 0.48, 0.64, 0.72);
+      caps[2].style.opacity = win(p, 0.88, 0.94, 1.02, 1.10);
+    }
+    requestAnimationFrame(frame);
+  }
+  build();
+  addEventListener('resize', () => { build(); lastP = -1; });
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    wrap.style.height = '100vh';
+  }
+  requestAnimationFrame(frame);
+})();
+
+/* ============ ROTATOR ============ */
+const tabs = [...document.querySelectorAll('.rot-tab')];
+const items = [...document.querySelectorAll('.rot-item')];
+let cur = 0, t0 = performance.now(), DUR = 5200, paused = false;
+function setRot(i) {
+  cur = i; t0 = performance.now();
+  tabs.forEach((t, k) => { t.classList.toggle('active', k === i); t.querySelector('.bar').style.width = k < i ? '100%' : '0'; });
+  items.forEach(it => it.classList.remove('active'));
+  setTimeout(() => items[i].classList.add('active'), 300);
+}
+function tick(now) {
+  if (!paused) {
+    const p = Math.min(1, (now - t0) / DUR);
+    tabs[cur].querySelector('.bar').style.width = (p * 100) + '%';
+    if (p >= 1) setRot((cur + 1) % items.length);
+  }
+  requestAnimationFrame(tick);
+}
+tabs.forEach((t, i) => t.addEventListener('click', () => setRot(i)));
+const rotBand = document.querySelector('.rot-band');
+rotBand.addEventListener('mouseenter', () => paused = true);
+rotBand.addEventListener('mouseleave', () => { paused = false; t0 = performance.now(); });
+setRot(0); requestAnimationFrame(tick);
+</script>
+</body>
+</html>
