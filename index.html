@@ -104,6 +104,12 @@
   .mcap.m2 .sm { font-family:var(--sans); font-size:17px; letter-spacing:-0.1px; line-height:1.45; text-transform:none; color:var(--td); opacity:.92; max-width:360px; margin-left:auto; margin-top:18px; }
   .mcap.m1 { left:8%; top:38%; color:var(--td); }
   .mcap.m2 { right:8%; top:42%; color:var(--td); text-align:right; max-width:380px; }
+  /* a soft scrim so the caption reads over the moving dot field */
+  .mcap.m2::before { content:''; position:absolute; inset:-54px -60px; z-index:-1; pointer-events:none;
+    border-radius:50%; backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    background:radial-gradient(closest-side, rgba(14,17,23,0.88), rgba(14,17,23,0.62) 58%, transparent 80%);
+    -webkit-mask-image:radial-gradient(closest-side, #000 62%, transparent 88%);
+    mask-image:radial-gradient(closest-side, #000 62%, transparent 88%); }
   .mcap.m3 { left:50%; top:34%; transform:translateX(-50%); color:var(--ink); text-align:center; max-width:560px;
     text-shadow:0 2px 24px rgba(245,244,241,0.9), 0 0 8px rgba(245,244,241,0.8); }
   .mcap.m0 { left:50%; top:20%; transform:translateX(-50%); text-align:center; color:var(--td);
@@ -129,31 +135,36 @@
   .p3 { left:50%; top:58%; transform:translateX(-50%); width:min(620px, 88vw); }
   .signrow { display:grid; grid-template-columns:1.15fr 1fr; gap:18px; align-items:start; }
   .signlist { list-style:none; margin:0 0 14px; padding:0; }
-  .signlist li { position:relative; font-size:11.5px; line-height:1.3; color:#1D2025;
-    padding:0 0 0 20px; margin-bottom:9px; }
-  .signlist li::before { content:''; position:absolute; left:2px; top:2px; width:11px; height:11px;
+  /* the signed doc reads as complete — it does not use the staged reveal
+     that .pdoc li inherits from the quote card */
+  .pdoc .signlist li { position:relative; font-size:11.5px; line-height:1.3; color:#1D2025;
+    padding:0 0 0 20px; margin-bottom:9px; opacity:1; transform:none; transition:none; }
+  .pdoc .signlist li::before { content:''; position:absolute; left:2px; top:2px; width:11px; height:11px;
     border-radius:3px; background:rgb(var(--accent)); }
-  .signlist li::after { content:''; position:absolute; left:5.4px; top:4.4px; width:3.5px; height:6.5px;
+  .pdoc .signlist li::after { content:''; position:absolute; left:5.4px; top:4.4px; width:3.5px; height:6.5px;
     border:solid #fff; border-width:0 1.6px 1.6px 0; transform:rotate(43deg); }
   .signfoot { display:flex; align-items:center; justify-content:space-between; gap:12px;
     border-top:1px solid rgba(29,32,37,0.14); padding-top:13px; }
   .signsig em { display:block; font-family:'Snell Roundhand','Apple Chancery',cursive; font-style:italic;
     font-size:19px; color:#1D2025; line-height:1; }
-  .signsig i { font-family:var(--sans); font-style:normal; font-size:9px; color:#767B85; letter-spacing:.04em; }
+  .signsig i { display:flex; align-items:center; gap:5px; font-family:var(--sans); font-style:normal;
+    font-size:9px; color:#767B85; letter-spacing:.04em; margin-top:3px; }
+  .signsig .pulse { width:7px; height:7px; border-radius:50%; background:#2E6B4F; flex:none;
+    animation:ppulse 1.6s var(--ease) infinite; }
   .signbtn { font-family:var(--sans); font-weight:500; font-size:11.5px; color:#FBFAFE;
     background:rgb(var(--accent)); border-radius:20px; padding:8px 15px; white-space:nowrap; }
   .thread { display:flex; flex-direction:column; gap:7px; padding-top:4px; }
   .tbub { font-family:var(--sans); font-size:11px; line-height:1.4; padding:9px 13px; border-radius:15px;
     max-width:92%; opacity:0; transform:translateY(8px);
-    box-shadow:0 6px 18px rgba(22,26,33,0.10);
-    transition:opacity .45s var(--ease), transform .45s var(--ease); }
+    box-shadow:0 6px 18px rgba(22,26,33,0.10); }
   .tbub.them { background:#fff; color:#1D2025; border:1px solid rgba(29,32,37,0.10);
     border-bottom-left-radius:5px; align-self:flex-start; }
   .tbub.me { background:rgb(var(--accent)); color:#fff; border-bottom-right-radius:5px; align-self:flex-end; }
-  .mpanel.play .tbub { opacity:1; transform:none; }
-  .mpanel.play .tbub:nth-child(1) { transition-delay:.55s; }
-  .mpanel.play .tbub:nth-child(2) { transition-delay:1.15s; }
-  .mpanel.play .tbub:nth-child(3) { transition-delay:1.75s; }
+  @keyframes revealup { to { opacity:1; transform:none; } }
+  .mpanel.play .tbub { animation:revealup .45s var(--ease) forwards; }
+  .mpanel.play .tbub:nth-child(1) { animation-delay:.55s; }
+  .mpanel.play .tbub:nth-child(2) { animation-delay:1.15s; }
+  .mpanel.play .tbub:nth-child(3) { animation-delay:1.75s; }
   .bframe { position:relative; background:#10141B; border:1px solid var(--line-d); border-radius:12px; overflow:hidden; }
   .bbar { display:flex; align-items:center; gap:6px; height:30px; padding:0 12px; background:#1A202B; }
   .bbar i { width:8px; height:8px; border-radius:50%; background:rgba(237,238,242,0.22); }
@@ -174,34 +185,36 @@
   .pdoc ul { list-style:none; margin:0; padding:0; }
   .pdoc li { font-size:13.5px; line-height:1.55; padding:5px 0 5px 20px; position:relative; opacity:0; transform:translateY(6px); transition:opacity .45s var(--ease), transform .45s var(--ease); }
   .pdoc li::before { content:''; position:absolute; left:2px; top:12px; width:6px; height:6px; border-radius:50%; background:#8F5F1E; }
-  .mpanel.play .pdoc li { opacity:1; transform:none; }
-  .mpanel.play .pdoc li:nth-child(1){transition-delay:.15s} .mpanel.play .pdoc li:nth-child(2){transition-delay:.45s}
-  .mpanel.play .pdoc li:nth-child(3){transition-delay:.75s} .mpanel.play .pdoc li:nth-child(4){transition-delay:1.05s}
-  .mpanel.play .pdoc li:nth-child(5){transition-delay:1.35s}
+  .mpanel.play .pdoc li { animation:revealup .45s var(--ease) forwards; }
+  .mpanel.play .pdoc li:nth-child(1){animation-delay:.15s} .mpanel.play .pdoc li:nth-child(2){animation-delay:.45s}
+  .mpanel.play .pdoc li:nth-child(3){animation-delay:.75s} .mpanel.play .pdoc li:nth-child(4){animation-delay:1.05s}
+  .mpanel.play .pdoc li:nth-child(5){animation-delay:1.35s}
   .pdoc-foot { display:flex; justify-content:space-between; align-items:baseline; border-top:1px solid rgba(29,32,37,0.16); margin-top:12px; padding-top:11px; font-family:var(--mono); }
   .pdoc-foot span { font-size:9.5px; letter-spacing:.13em; color:#5D616A; }
   .pdoc-foot b { font-size:17px; color:#8F5F1E; font-weight:500; opacity:0; transition:opacity .4s var(--ease) 1.7s; }
   .mpanel.play .pdoc-foot b { opacity:1; }
+  .mkicker { font-family:var(--sans); font-weight:500; font-size:11.5px; color:#5D616A; margin-bottom:11px; }
   .mgrid { display:grid; grid-template-columns:repeat(2, 1fr); gap:10px; }
   .mbox { position:relative; overflow:hidden; border-radius:10px; padding:15px 16px 17px;
     background:rgba(29,32,37,0.035); border:1px solid rgba(29,32,37,0.10);
-    opacity:0; transform:translateY(12px) scale(.96);
-    transition:opacity .5s var(--ease), transform .5s var(--ease); }
+    opacity:0; transform:translateY(12px) scale(.96); }
   .mbox .mnum { display:block; font-family:var(--disp); font-weight:600; font-size:15px;
     color:rgb(var(--accent)); margin-bottom:6px; }
   .mbox .mdesc { font-size:11.5px; line-height:1.55; color:#4A4F58; }
   .mbox::after { content:''; position:absolute; left:0; bottom:0; height:2px; width:0; background:rgb(var(--accent)); opacity:.75; }
-  .mpanel.play .mbox { opacity:1; transform:none; }
-  .mpanel.play .mbox { animation:mlit 6.6s var(--ease) infinite; }
+  @keyframes boxin { to { opacity:1; transform:none; } }
+  .mpanel.play .mbox { animation:boxin .5s var(--ease) forwards, mlit 6.6s var(--ease) infinite; }
   .mpanel.play .mbox::after { animation:mline 6.6s var(--ease) infinite; }
-  .mpanel.play .mbox:nth-child(1) { transition-delay:.10s; animation-delay:.7s; }
+  .mpanel.play .mbox:nth-child(1) { animation-delay:.10s, .7s; }
   .mpanel.play .mbox:nth-child(1)::after { animation-delay:.7s; }
-  .mpanel.play .mbox:nth-child(2) { transition-delay:.22s; animation-delay:1.0s; }
+  .mpanel.play .mbox:nth-child(2) { animation-delay:.22s, 1.0s; }
   .mpanel.play .mbox:nth-child(2)::after { animation-delay:1.0s; }
-  .mpanel.play .mbox:nth-child(3) { transition-delay:.34s; animation-delay:1.3s; }
+  .mpanel.play .mbox:nth-child(3) { animation-delay:.34s, 1.3s; }
   .mpanel.play .mbox:nth-child(3)::after { animation-delay:1.3s; }
-  .mpanel.play .mbox:nth-child(4) { transition-delay:.46s; animation-delay:1.6s; }
+  .mpanel.play .mbox:nth-child(4) { animation-delay:.46s, 1.6s; }
   .mpanel.play .mbox:nth-child(4)::after { animation-delay:1.6s; }
+  .mpanel.play .mbox:nth-child(5) { animation-delay:.58s, 1.9s; }
+  .mpanel.play .mbox:nth-child(5)::after { animation-delay:1.9s; }
   @keyframes mlit {
     0%, 4% { background:rgba(29,32,37,0.035); border-color:rgba(29,32,37,0.10); }
     10%, 44% { background:rgba(var(--accent),0.10); border-color:rgba(var(--accent),0.45); }
@@ -221,11 +234,43 @@
   .pdoc-status { display:flex; align-items:center; gap:8px; margin-top:14px; font-size:12.5px; color:#5D616A; }
   .pdoc-status .pulse { width:7px; height:7px; border-radius:50%; background:#2E6B4F; animation:ppulse 1.6s var(--ease) infinite; }
   @keyframes ppulse { 0%,100% { box-shadow:0 0 0 0 rgba(46,107,79,0.5); } 50% { box-shadow:0 0 0 6px rgba(46,107,79,0); } }
+  /* On phones the scroll-scrubbed morph becomes a plain stack: every caption
+     followed by the panel it describes, so the demo is actually visible. */
   @media (max-width:960px) {
-    .morph-wrap { height:220vh; }
-    .mpanel { display:none; }
-    .mcap p { font-size:21px; }
-    .mcap.m1 { left:20px; top:20%; } .mcap.m2 { right:20px; top:64%; }
+    .morph-wrap { height:auto; }
+    .morph-sticky { position:static; height:auto; overflow:visible;
+      display:flex; flex-direction:column; align-items:stretch; padding:70px 0 34px; }
+    .morph-sticky canvas { display:none; }
+
+    /* the desktop rules place these absolutely (.mcap.m0 { left:50% } etc.) and
+       out-rank this one, so the offsets have to be forced off for the stack */
+    .mcap, .mpanel { position:relative;
+      left:auto !important; right:auto !important; top:auto !important; bottom:auto !important;
+      width:100%; max-width:none;
+      opacity:1 !important; transform:none !important; padding:0 20px; }
+    .mcap { text-align:left; margin-bottom:20px; }
+    .mcap p { font-size:24px; }
+    .mcap .sm { font-size:14px; color:var(--td-mut); max-width:none; margin-left:0; }
+    .mcap.m2 { text-align:left; }
+    .mcap.m2::before { display:none; }
+    .mcap.m3 { color:var(--td); text-align:left; text-shadow:none; }
+    .mcap.m3 .sm { color:var(--td-mut); margin-left:0; }
+    .mcap.m3 .stepno { color:rgb(var(--accent)); }
+    .mcap.m0 { order:1; text-align:center; margin-bottom:54px; width:100%; }
+    .mcap.m1 { order:2; } #mp1 { order:3; }
+    .mcap.m2 { order:4; } #mp2 { order:5; }
+    .mcap.m3 { order:6; } #mp3 { order:7; }
+    .mpanel { margin-bottom:62px; }
+    #mp3 { margin-bottom:24px; }
+
+    .mgrid { grid-template-columns:1fr; }
+    .signrow { grid-template-columns:1fr; gap:16px; }
+    .pdoc { padding:18px 18px 20px; }
+    .thread { padding-left:2px; }
+    .tbub { max-width:82%; font-size:12px; }
+    .mbox .mdesc, .pdoc .signlist li { font-size:12.5px; }
+    .mkicker { font-size:12px; }
+    .marq-scroll { width:calc(100% - 40px); }
   }
 
   /* ---------- HERO ---------- */
@@ -410,6 +455,10 @@
   .band-label { display:flex; align-items:center; justify-content:center; gap:9px; font-family:var(--disp);
     font-weight:500; font-size:15px; letter-spacing:-0.2px; color:var(--ink); margin-bottom:24px; text-align:center; }
   .band-label::before { content:''; width:6px; height:6px; border-radius:50%; background:rgb(var(--accent)); }
+  @media (max-width: 760px) {
+    .band-label { display:block; padding:0 24px; }
+    .band-label::before { display:inline-block; vertical-align:middle; margin:0 8px 3px 0; }
+  }
   .marquee { overflow-x:auto; overflow-y:hidden; position:relative;
     user-select:none; -webkit-user-select:none;
     scrollbar-width:none; -ms-overflow-style:none; }
@@ -421,7 +470,7 @@
   .marq-thumb:active { cursor:grabbing; background:#5C67C4; }
   .marq-track { display:flex; gap:16px; width:max-content; align-items:stretch; }
   @keyframes marq { to { transform:translateX(-50%); } }
-  .tile { background:rgba(255,255,255,0.80); border:1px solid var(--line-l); border-radius:14px; padding:24px 26px 22px; width:440px; flex:none; display:flex; flex-direction:column; transition:border-color .2s var(--ease); }
+  .tile { background:rgba(255,255,255,0.80); border:1px solid var(--line-l); border-radius:14px; padding:24px 26px 22px; width:min(440px, 82vw); flex:none; display:flex; flex-direction:column; transition:border-color .2s var(--ease); }
   .tile .d { font-size:11.5px; line-height:1.62; color:var(--ink-sub); margin-top:12px; flex:1;
     padding-left:12px; border-left:2px solid rgba(var(--accent),0.28); }
   .tile .d p { margin:0 0 9px; }
@@ -454,6 +503,9 @@
   .on-dark .sec-sub, .dusk-cta .sec-sub { color:var(--td-sub); }
 
   .steps-belt { padding:110px 0 110px; }
+  .steps-belt .sec-head h2 { animation:hueshift 4.4s var(--ease) infinite; }
+  @keyframes hueshift { 0%, 100% { color:var(--ink); } 50% { color:#5A63C8; } }
+  @media (prefers-reduced-motion: reduce) { .steps-belt .sec-head h2 { animation:none; } }
   .vid { max-width:1000px; margin:48px auto 0; }
   .vid-frame { position:relative; aspect-ratio:16/9; border-radius:16px; overflow:hidden;
     background:linear-gradient(160deg, #1D232E, #12151B);
@@ -612,6 +664,10 @@
     .vid-script { margin-top:26px; }
     .close-card { padding:56px 24px; }
     .dark-panel { padding:56px 22px 40px; border-radius:20px; }
+    .foot-giant { padding:56px 0 4px; }
+    .foot-giant .gword { font-size:clamp(76px, 25vw, 140px);
+      background-image:radial-gradient(rgba(29,32,37,0.72) 1.15px, transparent 1.65px);
+      background-size:6px 6px; }
     .foot-row { flex-direction:column; gap:16px; }
     .fielddots, .wash, .seam .mx1, .seam .mx2 { background-attachment:scroll; }
   }
@@ -757,40 +813,44 @@
       <span class="m0-rule" aria-hidden="true"></span>
       <p>How it works</p>
       <span class="wm how-wm" id="howWm" aria-hidden="true"><span class="gslot"><span class="ghost">g</span></span>rain</span>
-      <span class="m0-sub">three steps · one price</span>
     </div>
     <div class="mcap m1"><p><em class="stepno">Step 1</em>Send us a rough description.</p></div>
-    <div class="mcap m2"><p><em class="stepno">Step 2</em>We'll send you an exact list of what we'll do, and an exact price — usually two quotes, so you pick what's best.</p><span class="sm">We only take the fee if we hit all the metrics. Feel free to edit the metrics with us at this stage.</span></div>
+    <div class="mcap m2"><p><em class="stepno">Step 2</em>We'll send you an exact list of what we'll do, and an exact price — usually two quotes, so you pick what's best.</p></div>
     <div class="mcap m3"><p><em class="stepno">Step 3</em>Sign and pay in one link.<br>We start immediately.</p><span class="sm">Every metric is on the doc you sign. From there we keep you posted over text — ask us anything, any time.</span></div>
     <div class="mpanel p1" id="mp1">
       <div class="bframe">
         <div class="bbar"><i></i><i></i><i></i><span>hiregrain.com</span></div>
         <div class="bbody">
           <div class="mini-box"><span id="btype"></span><span class="bcaret"></span></div>
-          <div class="mini-actions"><span class="mini-btn">Continue</span><span class="mini-mic">Speak it</span></div>
+          <div class="mini-actions"><span class="mini-btn">Submit</span><span class="mini-mic">Speak it</span></div>
         </div>
         <svg class="fakecursor" viewBox="0 0 24 24" width="20" height="20"><path d="M5 3l14 9-6 1-3 6z" fill="#EDEEF2" stroke="#161A21" stroke-width="1.2"/></svg>
       </div>
     </div>
     <div class="mpanel p2" id="mp2">
       <div class="pdoc">
-        <div class="pdoc-head"><span>Tax filing project for Amari Smith — Exact project metrics</span></div>
+        <div class="pdoc-head"><span>Tax filing project for Amari Smith &ndash; Quote 1 ($5,500)</span></div>
+        <div class="mkicker">Exact project metrics we will hit</div>
         <div class="mgrid">
           <div class="mbox">
-            <span class="mnum">1:</span>
+            <span class="mnum">Deductions</span>
             <p class="mdesc">At least $8,400 in deductions and credits identified across both entities. We itemize every one with the statute it comes from, so your accountant can check the work line by line.</p>
           </div>
           <div class="mbox">
-            <span class="mnum">2:</span>
+            <span class="mnum">Returns filed</span>
             <p class="mdesc">4 returns filed and accepted — 2 US federal and 2 foreign. You get the stamped confirmation for each one, plus a one-page summary of what was reported where.</p>
           </div>
           <div class="mbox">
-            <span class="mnum">3:</span>
+            <span class="mnum">Timeline</span>
             <p class="mdesc">Everything filed within 18 days of you sending the last PDF, which puts it 6 weeks ahead of the deadline. A progress note every Friday until it's done.</p>
           </div>
           <div class="mbox">
-            <span class="mnum">4:</span>
-            <p class="mdesc">Any agency notice answered within 48 hours, for 30 days after filing. Includes up to 3 hours with your accountant, scheduled within 5 business days of your asking.</p>
+            <span class="mnum">30 days continued</span>
+            <p class="mdesc">Any agency notice answered within 48 hours, for a full 30 days after filing. You forward it, we handle it — no new scope, no new invoice.</p>
+          </div>
+          <div class="mbox">
+            <span class="mnum">Accountant time</span>
+            <p class="mdesc">Up to 3 hours with your accountant, scheduled within 5 business days of your asking, so they can walk the return line by line with us.</p>
           </div>
         </div>
       </div>
@@ -806,10 +866,9 @@
             <li>Notices answered within 48 hours</li>
           </ul>
           <div class="signfoot">
-            <span class="signsig"><em>Amari Smith</em><i>signed</i></span>
+            <span class="signsig"><em>Amari Smith</em><i><span class="pulse"></span>signed</i></span>
             <span class="signbtn">Sign &amp; pay</span>
           </div>
-          <div class="pdoc-status"><span class="pulse"></span>Signed · work started today</div>
         </div>
         <div class="thread">
           <div class="tbub them">kicked off this morning — got both PDF sets, nothing missing 🙌</div>
@@ -827,7 +886,6 @@
   <div class="wrap">
     <div class="steps-belt" id="how">
       <div class="sec-head" style="padding-top:0;">
-        <span class="label rv">The process</span>
         <h2 class="rv rv2">Two minutes on how Grain works</h2>
       </div>
 
@@ -1026,7 +1084,20 @@ track.innerHTML += track.innerHTML;
     expected = lane.scrollLeft;
     paint();
   });
-  ['wheel', 'touchstart', 'keydown'].forEach(e => lane.addEventListener(e, touch, { passive: true }));
+  // A mouse press is deliberate. A finger is only deliberate once it moves
+  // sideways or lifts as a tap — scrolling the page past this lane is not.
+  lane.addEventListener('pointerdown', e => { if (e.pointerType === 'mouse') touch(); });
+  let tx = 0, ty = 0, tMoved = false;
+  lane.addEventListener('touchstart', e => {
+    const t = e.touches[0]; tx = t.clientX; ty = t.clientY; tMoved = false;
+  }, { passive: true });
+  lane.addEventListener('touchmove', e => {
+    const t = e.touches[0];
+    const dx = Math.abs(t.clientX - tx), dy = Math.abs(t.clientY - ty);
+    if (dx > 8 || dy > 8) tMoved = true;
+    if (dx > dy && dx > 8) touch();
+  }, { passive: true });
+  lane.addEventListener('touchend', () => { if (!tMoved) touch(); }, { passive: true });
 
   function paint() {
     const span = half() || 1;
@@ -1368,6 +1439,25 @@ document.getElementById('submitBtn').addEventListener('click', () => {
       }
     }
   }
+  // Phones get the stacked layout (see the max-width:960px block): no canvas and
+  // no scroll scrubbing, just each panel played the first time it appears. The
+  // check lives in the frame loop so crossing the breakpoint mid-session works.
+  const MOBILE = matchMedia('(max-width:960px)');
+  let mobileWired = false;
+  function wireMobile() {
+    if (mobileWired) return;
+    mobileWired = true;
+    if (window.__howDissolve) window.__howDissolve(0);
+    const io = new IntersectionObserver(es => {
+      es.forEach(e => {
+        if (!e.isIntersecting) return;
+        setPanel(e.target, 1, e.target === panels[0]);
+        io.unobserve(e.target);
+      });
+    }, { threshold: 0.15 });
+    panels.forEach(el => io.observe(el));
+  }
+
   const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   const clamp01 = v => Math.max(0, Math.min(1, v));
   const lerp = (a, b, t) => a + (b - a) * t;
@@ -1375,6 +1465,7 @@ document.getElementById('submitBtn').addEventListener('click', () => {
   const win = (p, a, b, c, d) => clamp01((p - a) / (b - a)) * (1 - clamp01((p - c) / (d - c)));
   let lastP = -1;
   function frame() {
+    if (MOBILE.matches) { wireMobile(); requestAnimationFrame(frame); return; }
     const vh = innerHeight;
     const rect = wrap.getBoundingClientRect();
     const total = wrap.offsetHeight - vh;
