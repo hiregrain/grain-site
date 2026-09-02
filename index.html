@@ -651,7 +651,7 @@
     -webkit-background-clip:text; background-clip:text; color:transparent; }
   footer { background:var(--bone); color:var(--ink); padding:30px 0 40px; position:relative; z-index:3; }
   .foot-row { display:flex; justify-content:space-between; align-items:baseline; border-top:1px solid rgba(29,32,37,0.12); padding-top:28px; }
-  .foot-links { display:flex; gap:28px; font-size:14.5px; color:var(--ink-sub); }
+  .foot-tag { font-family:var(--sans); font-size:14px; color:var(--ink-sub); margin-top:10px; }
   .legal { font-size:13px; color:var(--ink-sub); }
 
   /* ---------- RESPONSIVE ---------- */
@@ -673,13 +673,15 @@
     .founder { grid-template-columns:1fr; gap:30px; text-align:left; }
     .founder-photo { width:190px; }
     .founder-body h2 { font-size:25px; }
+    .founder-body p { font-size:13px; line-height:1.45; margin-bottom:10px; }
     .vid-script { margin-top:26px; }
     .close-card { padding:56px 24px; }
     .dark-panel { padding:56px 22px 40px; border-radius:20px; }
-    .foot-giant { padding:56px 0 4px; }
-    .foot-giant .gword { font-size:clamp(76px, 25vw, 140px);
-      background-image:radial-gradient(rgba(29,32,37,0.72) 1.15px, transparent 1.65px);
-      background-size:6px 6px; }
+    /* .86 line-height clips the g's descender against overflow:hidden */
+    .foot-giant { padding:56px 0 14px; overflow:visible; }
+    .foot-giant .gword { font-size:clamp(112px, 34vw, 200px); line-height:1.06;
+      background-image:radial-gradient(rgba(29,32,37,0.72) 1.5px, transparent 2.1px);
+      background-size:8px 8px; }
     .foot-row { flex-direction:column; gap:16px; }
     .fielddots, .wash, .seam .mx1, .seam .mx2 { background-attachment:scroll; }
   }
@@ -766,24 +768,24 @@
         <div class="marq-track" id="marqTrack">
           <div class="tile">
             <div class="t">Sofia asked us to kit out her studio in Austin and buy the equipment:</div>
-            <div class="d"><p>We took a lease on a 1,400 sq ft space in Austin and I have about two weeks before the first shoots are booked. It needs a full lighting grid, a cyc wall, sound treatment, and two camera bodies with glass &mdash; and I do not have the budget to buy any of that new.</p><p>the used market here is fine but its a nightmare to actually work. we have tried facebook marketplace, a couple of local rental houses, i met some guy in san marcos with three arri kits. every one of them needs somebody to physically go look at the gear, test it, and haggle. i have driven out twice already and both were a waste of an afternoon.</p><p>So what I actually need is a person on the ground here. Someone who can source the equipment, go and inspect it, negotiate, and then be in the room afterwards to rig the lighting and set the whole thing up. I don't want a consultant who emails me a spreadsheet of options. A lot of this is just driving around in person.</p></div>
+            <div class="d"><p>We took a lease on a new 1,400 square ft space in Austin and I have about two weeks before the first shoots are booked. To give yu an idea, it needs a full lighting grid, a cyc wall, sound treatment, and two camera bodies with glass.   I do not have the budget to buy any of that new atm.</p><p>the used market here is fine but its a nightmare to actually work it well! SO we have tried facebook marketplace, a couple of local rental houses, i met some guy in san marcos with three arri kits. And we need to do this for over 10 items, and every one of them needs somebody to physically go look at the gear, test it, and haggle. i have driven out twice already and both were a waste of an afternoon tbh lol.</p><p>So what I actually need is a person on the ground here. Like ideally this is someone who can source the equipment, go and inspect it in person, and also hopefully negotiate with the FB Marketplace seller (or wherever else the buy it). Then they need to be in the room afterwards to rig the lighting and set the whole thing up for a couple days (this can be a diff person but ideally is the same).</p><p>TO be very clear I don not want a consultant who emails me a spreadsheet of options. A lot of this is just driving around in person!</p></div>
             <div class="mtitle">Under 24 hours later, we agreed on these metrics:</div>
-            <ul class="mlist"><li>11 items sourced, inspected in person and bought, with total spend held under $18,000</li><li>Lighting grid, cyc wall and acoustic treatment installed, and the room's power confirmed to carry the grid before anything is bought</li><li>Our tech will be on-site for 2 days, and do a walkthrough with your DP before the first shoot</li><li>Anything that fails once it is rigged gets replaced at our cost, not yours</li><li>Every purchase receipted with condition notes and the seller's contact</li></ul>
+            <ul class="mlist"><li>We'll source, inspect in-person, and buy all 11 items, and keep your total spend under $18,000.</li><li>We'll install the full lighting grid, the cyc wall and the acoustic treatment, and we'll confirm the room's power can carry the grid before confirming the purchases.</li><li>Our tech will be on-site for 2 days, and he'll do a full walkthrough with your DP before the first shoot.</li><li>If anything fails once it's rigged we'll replace it at our cost.</li><li>You'll get a receipt for every purchase (with condition notes and the seller's contact attached).</li></ul>
             <p class="mclose">We did this for a $6,000 flat fee in 14 days.</p>
           </div>
           <div class="tile">
             <div class="t">Almar asked us to build an internal course:</div>
-            <div class="d"><p>Hello. I'm the CTO of Reading Rooms and we're currently building out our 12th Grade Honors course (ELA / English). This will require making 30 different quizzes around 30 different standard essays. So we need to hire two people &mdash; or one person with both skills &mdash; to do the technical work of building the quizzes on our site, and the actual editorial work of choosing the right texts and writing the question choices. That second part is a high school English teacher's skill set, not an engineer's. The platform and the CMS already exist, so nobody needs to write code. It is data entry into our question builder. But it has to be done by someone who knows what a good distractor looks like, or the whole bank is worthless. Two contractors have tried this already and both handed back questions where the correct answer was obvious from its length. I would rather pay once for someone who actually knows the material than keep reviewing this myself, because right now I am the bottleneck and I am the CTO.</p></div>
+            <div class="d"><p>Hello there. I am Almar, the CTO of Reading Rooms. To give you context we are currently building out our 12th Grade Honors course (ELA / English). This will require making 30 different quizzes around 30 different standard essays. So we need to hire two people (or perhaps one person with both skills?)  to do the technical work of building the quizzes on our site, and all of the actual editorial work of choosing the right texts + writing the question choices. So the second part is ideal for a high school English teacher. Like that's not an engineer skillset, especially because they actually need to know regular ELA 12 coursework. Anyway. The platform and the CMS already exist, so nobody needs to write code. What the engineer needs to do is data entry into our question builder. But it has to be done by someone who knows what a good distractor question looks like. 2 contractors have tried this already and it wasn't great, I mean, both handed back questions where the correct answer was obvious. So to be very clear I would rather pay once for someone who actually knows the material. In a full hands-off way where I have to do no reviewing of this myself; right now I am the bottleneck and I want to get past this.</p></div>
             <div class="mtitle">Under 24 hours later, we agreed on these metrics:</div>
-            <ul class="mlist"><li>30 quizzes built and live in your CMS, one for each essay on the 12th Grade Honors list</li><li>Every quiz written by a certified high school ELA teacher &mdash; 10 questions each, with distractors that are actually plausible</li><li>Full answer-key review before handoff, and we rewrite anything you reject at no extra cost</li></ul>
+            <ul class="mlist"><li>We'll build 30 quizzes (live in your CMS) for each essay on the 12th Grade Honors list.</li><li>Every quiz will be written by a certified high school ELA teacher (10 questions each) with plausible distractors.</li><li>We'll run a full answer key review before handing it off, and we’ll rewrite anything you reject at no extra cost.</li></ul>
             <p class="mclose">We did this for a $2,000 flat fee in 7 days.</p>
             <div class="tile-logo"><img class="tl-mark" src="reading-rooms.png" alt="" width="32" height="32"><span class="tl-name">Reading Rooms<em>Education</em></span></div>
           </div>
           <div class="tile">
             <div class="t">Jason asked us to cold call potential customers:</div>
-            <div class="d"><p>We manufacture dental prosthetics. Crowns, bridges, that whole category. We sell direct to the practices instead of going through distributors. Our growth so far has been almost all referral, and it has flattened out over the last two quarters. I have a list of roughly 1,000 practices across Texas and not one person calling them.</p><p>What matters most to me is who is actually on the phone. I have tried overseas call centers twice now. Both times the practice manager could tell inside ten seconds and hung up on us. I need Americans, twenties or thirties, genuinely charismatic, the kind of person who can hold a dentist's attention while he is between patients and has no interest in talking. I would far rather have five excellent callers than twenty cheap ones!</p><p>Overall there's basically 2 things I care about. 1) They close the sale on the call. 2) They book me for an in-person meeting, with clear interest shown beforehand, and then I or one of my guys will drive out to meet them. I want crazy good conversion on this whole ordeal. And when someone does buy, the handoff to our invoicing team has to be clean. That part is not negotiable!</p></div>
+            <div class="d"><p>We at Q Lab manufacture dental prosthetics; crowns, bridges, that whole category. As it stands, the current focus of our sales is that we sell direct to the practices instead of going through distributors. Our growth so far has been almost all referral, and it has flattened out over the last year. Anyway, currently I have a list of roughly 1,000 practices across Texas, and I need someone to call them. I need someone to call them well!</p><p>What matters most to me is who is actually on the phone, can jam phones all day, but has the charisma! I have tried overseas call centers twice now, and frankly I am disappointed. Cash flow not well spent. So, I need Americans, 20-39 years old, genuinely charismatic. The kind of guy (or gal) who can for real hold a dentist's attention. Even if the dentist is between patients and has no interest in talking. Convert! I would far rather have five excellent callers than twenty cheap ones.</p><p>Ask: Overall, basically there are 2 things I care about: 1) They close the sale on the call. 2) They book me for an in-person meeting (then I or one of my guys will drive to meet them in-person) with clear interest shown beforehand. I want crazy good conversion on this whole ordeal. Think like a 25 year old in New York that currently makes $200k per year that has the right set of motivation to push hard on  this. I am open to giving him a bonus if the results are there. And when someone does buy, the handoff to our invoicing team has to be clean too. There is more to it than just calls. That part is not negotiable!</p></div>
             <div class="mtitle">Under 24 hours later, we agreed on these metrics:</div>
-            <ul class="mlist"><li>All 1,000 Texas practices called by US-based callers, each screened on a live mock call before they touch your list</li><li>Any practice we cannot reach gets 3 further attempts across different days and times before it is marked closed</li><li>10 purchase commitments taken over the phone and handed to your invoicing team the same day</li><li>25 in-person meetings booked straight into your calendar, routed by geography so the drives make sense</li><li>1 in every 15 calls reviewed for tone and effort, and any caller who is coasting comes off the account</li></ul>
+            <ul class="mlist"><li>We'll call all 1,000 Texas practices on your list using high-end US-based callers, set up an incentive/motivation structure for them, and screen all of them on a live mock call beforehand.</li><li>If we can't reach a practice, we'll call back 3 more times across different days and times before we mark it closed.</li><li>We'll get you 10 purchase commitments over the phone and 25 in-person meetings booked straight into your calendar.</li><li>We'll review 1 in every 15 calls randomly for tone / effort, and immediately offboard any caller who's coasting.</li></ul>
             <p class="mclose">We did the first 1,000 calls for a $12,000 flat fee in 14 days, and then moved to a $1,000/week retainer for follow-ups and returning calls, to be eventually cancelled at Jason's discretion.</p>
             <div class="tile-logo"><img class="tl-lockup" src="qlab.png" alt="Q Lab"><span class="tl-name"><em>Dental lab, Austin</em></span></div>
           </div>
@@ -805,7 +807,7 @@
     <div class="noise"></div>
     <div class="mcap m0">
       <span class="m0-rule" aria-hidden="true"></span>
-      <p>How it works</p>
+      <p>Our goal is to make projects as easy as possible</p>
       <span class="wm how-wm" id="howWm" aria-hidden="true"><span class="gslot"><span class="ghost">g</span></span>rain</span>
     </div>
     <div class="mcap m1"><p><em class="stepno">Step 1</em>Send us a rough description.</p></div>
@@ -946,13 +948,12 @@
 <section class="close-belt on-light" id="start">
   <div class="fielddots"></div>
 
-  <div class="foot-giant"><div class="gword">grain</div></div>
+  <div class="foot-giant"><div class="gword">grain</div><div class="foot-tag">projects made easy.</div></div>
 
   <footer>
     <div class="wrap">
       <div class="foot-row">
         <span class="wm" style="font-size:17px;">grain</span>
-        <span class="foot-links"><a href="#how">How it works</a><a href="#projects">Projects</a><button type="button" data-sms class="foot-sms">Text us</button></span>
         <span class="legal">© Grain Inc. 2026 · hiregrain.com</span>
       </div>
     </div>
