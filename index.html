@@ -13,7 +13,7 @@
     --line-d:rgba(237,238,242,0.10);
     --td:#EDEEF2; --td-sub:rgba(237,238,242,0.70); --td-mut:rgba(237,238,242,0.45);
     --bone:#F5F4F1; --ink:#1D2025; --ink-sub:#5D616A; --line-l:rgba(29,32,37,0.10);
-    --indigo:105,118,220; --amber:232,179,107;
+    --indigo:105,118,220; --amber:232,179,107; --blue:44,110,206;
     --sans:'Familjen Grotesk',sans-serif; --disp:'Archivo',sans-serif; --mono:'IBM Plex Mono',ui-monospace,monospace;
     --accent:105,118,220;
     --ease:cubic-bezier(.4,0,.2,1);
@@ -140,17 +140,13 @@
   .pdoc .signlist li { position:relative; font-size:11.5px; line-height:1.3; color:#1D2025;
     padding:0 0 0 20px; margin-bottom:9px; opacity:1; transform:none; transition:none; }
   .pdoc .signlist li::before { content:''; position:absolute; left:2px; top:2px; width:11px; height:11px;
-    border-radius:3px; background:rgb(var(--accent)); }
+    border-radius:3px; background:#3A4048; }
   .pdoc .signlist li::after { content:''; position:absolute; left:5.4px; top:4.4px; width:3.5px; height:6.5px;
     border:solid #fff; border-width:0 1.6px 1.6px 0; transform:rotate(43deg); }
   .signfoot { display:flex; align-items:center; justify-content:space-between; gap:12px;
     border-top:1px solid rgba(29,32,37,0.14); padding-top:13px; }
   .signsig em { display:block; font-family:'Snell Roundhand','Apple Chancery',cursive; font-style:italic;
     font-size:19px; color:#1D2025; line-height:1; }
-  .signsig i { display:flex; align-items:center; gap:5px; font-family:var(--sans); font-style:normal;
-    font-size:9px; color:#767B85; letter-spacing:.04em; margin-top:3px; }
-  .signsig .pulse { width:7px; height:7px; border-radius:50%; background:#2E6B4F; flex:none;
-    animation:ppulse 1.6s var(--ease) infinite; }
   .signbtn { font-family:var(--sans); font-weight:500; font-size:11.5px; color:#FBFAFE;
     background:rgb(var(--accent)); border-radius:20px; padding:8px 15px; white-space:nowrap; }
   .thread { display:flex; flex-direction:column; gap:7px; padding-top:4px; }
@@ -159,7 +155,7 @@
     box-shadow:0 6px 18px rgba(22,26,33,0.10); }
   .tbub.them { background:#fff; color:#1D2025; border:1px solid rgba(29,32,37,0.10);
     border-bottom-left-radius:5px; align-self:flex-start; }
-  .tbub.me { background:rgb(var(--accent)); color:#fff; border-bottom-right-radius:5px; align-self:flex-end; }
+  .tbub.me { background:rgb(var(--blue)); color:#fff; border-bottom-right-radius:5px; align-self:flex-end; }
   @keyframes revealup { to { opacity:1; transform:none; } }
   .mpanel.play .tbub { animation:revealup .45s var(--ease) forwards; }
   .mpanel.play .tbub:nth-child(1) { animation-delay:.55s; }
@@ -270,7 +266,6 @@
     .tbub { max-width:82%; font-size:12px; }
     .mbox .mdesc, .pdoc .signlist li { font-size:12.5px; }
     .mkicker { font-size:12px; }
-    .marq-scroll { width:calc(100% - 40px); }
   }
 
   /* ---------- HERO ---------- */
@@ -367,8 +362,6 @@
   .parse-dots span:nth-child(4){ animation-delay:.3s; } .parse-dots span:nth-child(5){ animation-delay:.4s; }
   @keyframes settle { 0%{ transform:translateY(0);} 20%{ transform:translateY(-5px);} 40%{ transform:translateY(0);} 100%{ transform:translateY(0);} }
 
-  .quote-note { font-family:var(--disp); font-weight:500; font-size:17px; letter-spacing:-0.2px;
-    color:var(--td); margin:2px 0 4px; }
   .budget { margin-top:4px; }
   .budget-row { display:flex; align-items:center; gap:20px; margin-bottom:14px; }
   .budget-val { font-family:var(--disp); font-weight:600; font-size:24px; color:var(--td); min-width:110px; letter-spacing:-0.5px; }
@@ -400,6 +393,13 @@
   .fld label .opt { color:rgba(237,238,242,0.28); font-weight:400; }
   .fld input { width:100%; background:transparent; border:none; border-bottom:1px solid rgba(237,238,242,0.20); border-radius:0; color:var(--td); font-family:var(--sans); font-size:16.5px; padding:5px 0 10px; outline:none; transition:border-color .2s var(--ease); }
   .fld input:focus { border-color:rgba(var(--accent),0.85); }
+  .phonerow { display:flex; align-items:baseline; gap:10px; }
+  .phonerow .phone-cc { width:52px; flex:none; text-align:left; cursor:pointer;
+    color:var(--td-mut); transition:color .2s var(--ease); }
+  .phonerow .phone-cc:hover { color:var(--td); }
+  .phonerow .phone-cc.editing { cursor:text; color:var(--td); }
+  .phonerow #fPhone { flex:1; }
+  .fld.bad .phonerow input { border-color:rgba(229,160,160,0.7); }
   .fld.bad input { border-color:rgba(229,160,160,0.7); }
   .seg { display:flex; gap:8px; max-width:340px; }
   .seg button { flex:1; border:1px solid rgba(237,238,242,0.18); background:none; color:var(--td-sub); border-radius:9px; padding:10px 0; font-size:14px; cursor:pointer; font-family:var(--sans); transition:border-color .2s, color .2s, background .2s; }
@@ -459,18 +459,23 @@
     .band-label { display:block; padding:0 24px; }
     .band-label::before { display:inline-block; vertical-align:middle; margin:0 8px 3px 0; }
   }
+  .marq-band { position:relative; }
   .marquee { overflow-x:auto; overflow-y:hidden; position:relative;
-    user-select:none; -webkit-user-select:none;
-    scrollbar-width:none; -ms-overflow-style:none; }
+    scroll-behavior:smooth; scroll-snap-type:x mandatory;
+    scrollbar-width:none; -ms-overflow-style:none; padding:2px 40px 4px; }
   .marquee::-webkit-scrollbar { display:none; }
-  .marq-scroll { position:relative; height:10px; border-radius:10px; margin:22px auto 0;
-    max-width:1200px; background:rgba(29,32,37,0.10); cursor:pointer; }
-  .marq-thumb { position:absolute; top:0; left:0; height:100%; border-radius:10px;
-    background:rgb(var(--accent)); cursor:grab; }
-  .marq-thumb:active { cursor:grabbing; background:#5C67C4; }
-  .marq-track { display:flex; gap:16px; width:max-content; align-items:stretch; }
+  .marq-track { display:flex; gap:18px; align-items:stretch; width:100%; }
+  .marq-next { position:absolute; top:50%; right:14px; transform:translateY(-50%);
+    width:52px; height:52px; border-radius:50%; border:none; cursor:pointer; z-index:6;
+    display:none; place-items:center; color:#fff; background:rgb(var(--accent));
+    box-shadow:0 8px 24px rgba(var(--accent),0.45);
+    transition:transform .18s var(--ease), background .18s var(--ease); }
+  .marq-next:hover { background:#5C67C4; }
+  .marq-next:active { transform:translateY(-50%) scale(.93); }
   @keyframes marq { to { transform:translateX(-50%); } }
-  .tile { background:rgba(255,255,255,0.80); border:1px solid var(--line-l); border-radius:14px; padding:24px 26px 22px; width:min(440px, 82vw); flex:none; display:flex; flex-direction:column; transition:border-color .2s var(--ease); }
+  .tile { background:rgba(255,255,255,0.80); border:1px solid var(--line-l); border-radius:14px;
+    padding:24px 26px 22px; flex:1 1 0; min-width:0; scroll-snap-align:center;
+    display:flex; flex-direction:column; transition:border-color .2s var(--ease); }
   .tile .d { font-size:11.5px; line-height:1.62; color:var(--ink-sub); margin-top:12px; flex:1;
     padding-left:12px; border-left:2px solid rgba(var(--accent),0.28); }
   .tile .d p { margin:0 0 9px; }
@@ -486,11 +491,19 @@
     margin-top:14px; padding-top:13px; border-top:1px solid var(--line-l); }
   .tile-logo { display:flex; align-items:center; gap:9px; margin-top:18px; padding-top:14px;
     border-top:1px solid var(--line-l); }
-  .tl-mark { width:26px; height:26px; border-radius:6px; display:grid; place-items:center; flex:none;
+  .tl-mark { width:32px; height:32px; border-radius:7px; display:grid; place-items:center; flex:none;
     color:#fff; font-family:var(--disp); font-weight:600; font-size:13px; }
+  img.tl-mark { object-fit:contain; background:none; }
+  .tl-lockup { height:30px; width:auto; flex:none; object-fit:contain; }
   .tl-name { font-family:var(--disp); font-weight:500; font-size:13px; letter-spacing:-0.2px; color:var(--ink); line-height:1.25; }
   .tl-name em { display:block; font-style:normal; font-family:var(--sans); font-weight:400;
     font-size:10.5px; letter-spacing:.02em; color:var(--ink-sub); }
+  @media (max-width: 900px) {
+    .marquee { padding:2px 20px 4px; }
+    .marq-track { width:max-content; }
+    .tile { flex:0 0 84vw; }
+    .marq-next { display:grid; }
+  }
   .tile:hover { border-color:rgba(var(--accent),0.40); }
   .tile .t { font-family:var(--disp); font-size:15px; font-weight:500; line-height:1.35; color:var(--ink); }
   .tile .m { font-family:var(--sans); font-weight:500; font-size:13px; color:var(--ink); margin-top:16px; padding-top:12px; border-top:1px solid var(--line-l); }
@@ -520,11 +533,13 @@
     padding-left:5px; backdrop-filter:blur(3px);
     transition:transform .25s var(--ease), background .25s var(--ease), border-color .25s var(--ease); }
   .vid-play:hover { transform:scale(1.06); background:rgba(var(--accent),0.32); border-color:rgba(var(--accent),0.65); }
-  .vid-meta { font-family:var(--sans); font-size:13px; color:rgba(237,238,242,0.55); }
+  .vid-meta { font-family:var(--disp); font-weight:500; font-size:13.5px; letter-spacing:-0.1px;
+    color:rgba(237,238,242,0.58); }
   .vid-script { max-width:760px; margin:34px auto 0; }
   .founder-body .label { margin-bottom:14px; }
   .vid-script-label { font-family:var(--sans); font-weight:500; font-size:13px; color:rgb(var(--accent)); margin-bottom:12px; }
   .vid-script p { font-size:14px; line-height:1.7; color:var(--ink-sub); margin-bottom:11px; }
+  .vid-script .vid-soon { color:rgba(93,97,106,0.48); }
   .vid-script p:last-child { margin-bottom:0; }
   .steps { border-top:1px solid rgba(29,32,37,0.16); max-width:1000px; margin:52px auto 0; }
   .step { display:grid; grid-template-columns:90px 1fr 1.25fr; gap:40px; padding:30px 0; border-bottom:1px solid rgba(29,32,37,0.16); align-items:baseline; }
@@ -613,18 +628,15 @@
   .founder-photo.noimg .founder-fallback { display:grid; }
   .founder-body h2 { font-family:var(--disp); font-weight:500; font-size:31px; line-height:1.2;
     letter-spacing:-0.8px; margin-bottom:16px; }
-  .founder-body p { font-size:16px; line-height:1.6; color:var(--ink-sub); max-width:520px; }
+  .founder-body p { font-size:16px; line-height:1.6; color:var(--ink-sub); max-width:520px; margin-bottom:14px; }
+  .founder-body p:last-of-type { margin-bottom:0; }
+  .lore-link { color:var(--ink); text-decoration:underline; text-underline-offset:3px; }
   .founder-cta { display:inline-flex; align-items:center; gap:9px; margin-top:26px;
     font-family:var(--sans); font-weight:500; font-size:15px; color:var(--ink);
     background:rgba(var(--accent),0.12); border:1px solid rgba(var(--accent),0.35);
     border-radius:30px; padding:12px 22px;
     transition:background .2s var(--ease), border-color .2s var(--ease), gap .2s var(--ease); }
   .founder-cta:hover { opacity:1; background:rgba(var(--accent),0.22); border-color:rgba(var(--accent),0.7); gap:13px; }
-  .founder-sig { display:block; margin-top:18px; font-family:var(--sans); font-size:13px; color:var(--ink-sub); }
-  .founder-article { margin-top:26px; padding-top:22px; border-top:1px solid rgba(var(--accent),0.28); max-width:560px; }
-  .founder-article p { font-size:14.5px; line-height:1.7; color:var(--ink-sub); margin-bottom:13px; }
-  .founder-article p:first-child { font-style:italic; color:rgba(93,97,106,0.7); }
-  .founder-article p:last-child { margin-bottom:0; }
   .close-belt { position:relative; background:var(--bone); padding:0 0 0; overflow:hidden; }
   .close-card { position:relative; overflow:hidden; background:var(--dark); border-radius:28px; text-align:center; padding:88px 64px; color:var(--td); }
   .close-card h2 { color:var(--td); margin-bottom:14px; }
@@ -705,19 +717,24 @@
               <span>Speak it</span>
             </button>
             <div class="parse-dots" id="parseDots"><span></span><span></span><span></span><span></span><span></span></div>
-            <button class="ws-esc" type="button" data-sms>text us instead: 512-653-9872</button>
+            <button class="ws-esc" type="button" data-sms>text us questions: 512-653-9872</button>
           </div>
           <div class="err" id="err1">Tell us a little more first.</div>
         </div>
 
         <div class="wstep" id="step2">
           <div class="fldrow">
-            <div class="fld"><label for="fName">Name</label><input id="fName" autocomplete="name"></div>
+            <div class="fld"><label for="fName">Full Name</label><input id="fName" autocomplete="name"></div>
             <div class="fld"><label for="fCo">Company <span class="opt">optional</span></label><input id="fCo" autocomplete="organization"></div>
-            <div class="fld"><label for="fPhone">Textable phone <span class="opt">recommended</span></label><input id="fPhone" type="tel" autocomplete="tel" inputmode="tel"></div>
+            <div class="fld"><label for="fPhone">Textable phone <span class="opt">recommended</span></label>
+              <div class="phonerow">
+                <input class="phone-cc" id="fCC" value="+1" readonly inputmode="tel"
+                       aria-label="Country code" title="Click to change the country code">
+                <input id="fPhone" type="tel" autocomplete="tel" inputmode="tel"
+                       placeholder="" maxlength="18">
+              </div></div>
             <div class="fld"><label for="fEmail">Email <span class="opt">if you prefer</span></label><input id="fEmail" type="email" autocomplete="email" inputmode="email"></div>
           </div>
-          <p class="quote-note">We'll text you a few quotes.</p>
           <div class="ws-tools">
             <button class="ws-send" id="submitBtn">Send to Grain</button>
             <button class="ws-esc" id="backBtn">back</button>
@@ -748,56 +765,33 @@
       <div class="marquee rv rv2">
         <div class="marq-track" id="marqTrack">
           <div class="tile">
-            <div class="t">Mike asked us to migrate 400 restaurant menus into a new POS:</div>
-            <div class="d"><p>ok so we bought basically 400 restaurants worth of menus, theyre all pdfs and a bunch are literally photos someone took on their phone, some are sideways. all of it has to be in the new POS before we cut over march 1.</p><p>the modifiers are the part that kills you, every burger has like 9 options and the old system named them all differently. also probably a third of the owners just wont answer email so somebody has to actually pick up a phone and call them. we put 2 of our own people on it and after 3 weeks they had done 40. so, not happening internally</p><p>honestly at this point im less worried about the money and more worried that march 1 comes and we have half a menu system live. that would be genuinely bad for us with the franchisees, theyre already skeptical about this whole switch</p></div>
-            <div class="mtitle">Under 24 hours later, we agreed on these 6 metrics:</div>
-            <ul class="mlist"><li>All 400 locations live in the POS before Feb 24</li><li>Every modifier group matched 1:1 against the old system</li><li>Owner confirmation call logged for all 137 unresponsive accounts</li><li>Price and tax rules checked against the last filed menu at each site</li><li>Zero orders failing at the register in the first week after cutover</li><li>A named fallback contact for every franchise that pushed back</li></ul>
-            <p class="mclose">We did this for a $4,000 flat fee in 6 days.</p>
-            <div class="tile-logo"><span class="tl-mark" style="background:#C9553D;">H</span><span class="tl-name">Harbor Row<em>Restaurant Group</em></span></div>
+            <div class="t">Sofia asked us to kit out her studio in Austin and buy the equipment:</div>
+            <div class="d"><p>We took a lease on a 1,400 sq ft space in Austin and I have about two weeks before the first shoots are booked. It needs a full lighting grid, a cyc wall, sound treatment, and two camera bodies with glass &mdash; and I do not have the budget to buy any of that new.</p><p>the used market here is fine but its a nightmare to actually work. we have tried facebook marketplace, a couple of local rental houses, i met some guy in san marcos with three arri kits. every one of them needs somebody to physically go look at the gear, test it, and haggle. i have driven out twice already and both were a waste of an afternoon.</p><p>So what I actually need is a person on the ground here. Someone who can source the equipment, go and inspect it, negotiate, and then be in the room afterwards to rig the lighting and set the whole thing up. I don't want a consultant who emails me a spreadsheet of options. A lot of this is just driving around in person.</p></div>
+            <div class="mtitle">Under 24 hours later, we agreed on these metrics:</div>
+            <ul class="mlist"><li>11 items sourced, inspected in person and bought, with total spend held under $18,000</li><li>Lighting grid, cyc wall and acoustic treatment installed, and the room's power confirmed to carry the grid before anything is bought</li><li>Our tech will be on-site for 2 days, and do a walkthrough with your DP before the first shoot</li><li>Anything that fails once it is rigged gets replaced at our cost, not yours</li><li>Every purchase receipted with condition notes and the seller's contact</li></ul>
+            <p class="mclose">We did this for a $6,000 flat fee in 14 days.</p>
           </div>
           <div class="tile">
-            <div class="t">Dana asked us to stand up and run her outbound pipeline:</div>
-            <div class="d"><p>We have no outbound function at all — everything to date has come from inbound and referrals, and that has flattened out over the last two months in a way I no longer think is noise. What I'm looking for is someone to build the whole motion and then actually run it: define who we should be targeting (I have views, though I suspect they're wrong), write the sequences, stand up the tooling, and keep tuning it week over week. My two AEs close well but they will not prospect — I've asked, and I've stopped pretending otherwise. I've also spoken to three agencies, all of whom wanted six months and a retainer before they'd tell me anything specific, and the last one I hired burned nine months to produce four meetings, two of which were with the wrong company entirely. I don't want another strategy deck. I want meetings on the calendar.</p></div>
-            <div class="mtitle">Under 24 hours later, we agreed on these 5 metrics:</div>
-            <ul class="mlist"><li>1,800 verified contacts built and enriched</li><li>12 qualified meetings booked directly on your AEs' calendars</li><li>Bounce rate held under 4% across every send</li><li>Replies routed to the right AE within 30 minutes</li><li>Sequences retuned weekly, reply-rate report every Friday</li></ul>
-            <p class="mclose">We did this for a $6,500 flat fee in 4 weeks.</p>
-            <div class="tile-logo"><span class="tl-mark" style="background:#3D6BC9;">K</span><span class="tl-name">Kettleback<em>Systems</em></span></div>
+            <div class="t">Almar asked us to build an internal course:</div>
+            <div class="d"><p>Hello. I'm the CTO of Reading Rooms and we're currently building out our 12th Grade Honors course (ELA / English). This will require making 30 different quizzes around 30 different standard essays. So we need to hire two people &mdash; or one person with both skills &mdash; to do the technical work of building the quizzes on our site, and the actual editorial work of choosing the right texts and writing the question choices. That second part is a high school English teacher's skill set, not an engineer's. The platform and the CMS already exist, so nobody needs to write code. It is data entry into our question builder. But it has to be done by someone who knows what a good distractor looks like, or the whole bank is worthless. Two contractors have tried this already and both handed back questions where the correct answer was obvious from its length. I would rather pay once for someone who actually knows the material than keep reviewing this myself, because right now I am the bottleneck and I am the CTO.</p></div>
+            <div class="mtitle">Under 24 hours later, we agreed on these metrics:</div>
+            <ul class="mlist"><li>30 quizzes built and live in your CMS, one for each essay on the 12th Grade Honors list</li><li>Every quiz written by a certified high school ELA teacher &mdash; 10 questions each, with distractors that are actually plausible</li><li>Full answer-key review before handoff, and we rewrite anything you reject at no extra cost</li></ul>
+            <p class="mclose">We did this for a $2,000 flat fee in 7 days.</p>
+            <div class="tile-logo"><img class="tl-mark" src="reading-rooms.png" alt="" width="32" height="32"><span class="tl-name">Reading Rooms<em>Education</em></span></div>
           </div>
           <div class="tile">
-            <div class="t">Priya asked us to build and staff her customer onboarding:</div>
-            <div class="d"><p>Every customer gets onboarded differently depending on who picks it up that week.</p><p>Its written down nowhere. Its in my head and in slack threads from 2024. When someone is out, the whole thing just stops.</p><p>We lost 2 accounts last quarter and both said more or less the same thing — that they never really got set up properly. So this is costing us actual money now, not hypothetical money.</p><p>The part I keep getting stuck on is whether this is a hiring problem or a process problem. I don't want to hire a CS person and find out four months later that the real issue was that nobody ever wrote the thing down.</p></div>
-            <div class="mtitle">Under 24 hours later, we agreed on these 2 metrics:</div>
-            <ul class="mlist"><li>Every new account onboarded by Grain end to end, with time-to-first-value under 10 days</li><li>The whole process written down and handed over, so you can take it in-house whenever you want</li></ul>
-            <p class="mclose">We did this for $7,500 to set it up, then $2,500 a month to run it.</p>
-            <div class="tile-logo"><span class="tl-mark" style="background:#2E7D5B;">T</span><span class="tl-name">Thornfield<em>Health</em></span></div>
-          </div>
-          <div class="tile">
-            <div class="t">Sofia asked us to kit out her studio in Austin and staff the build:</div>
-            <div class="d"><p>We took a lease on a 1,400 sq ft space in east Austin and I have about six weeks before the first shoots are booked. It needs a full lighting grid, a cyc wall, sound treatment, and two camera bodies with glass — and I do not have the budget to buy any of that new.</p><p>the used market here is fine but its a nightmare to actually work. facebook marketplace, a couple of local rental houses liquidating, some guy in san marcos with three arri kits. every one of them needs somebody to physically go look at the gear, test it, and haggle. i have driven out twice already and both were a waste of an afternoon.</p><p>So what I actually need is a person on the ground here. Someone who can source the equipment, go and inspect it, negotiate, and then be in the room to rig the lighting and set the whole thing up so it works on day one. Not a consultant who emails me a spreadsheet of options.</p></div>
-            <div class="mtitle">Under 24 hours later, we agreed on these 6 metrics:</div>
-            <ul class="mlist"><li>Full lighting grid, cyc wall and sound treatment installed and signed off</li><li>All 11 equipment items sourced used and inspected in person before purchase</li><li>Total gear spend held under $18,400 against a $26,000 new-buy quote</li><li>Two on-site rig days with our tech, plus a walkthrough with your DP</li><li>Every purchase receipted with condition notes and seller contact</li><li>Room ready to shoot in 5 weeks, ahead of your first booking</li></ul>
-            <p class="mclose">We did this for a $2,500 flat fee in 5 weeks.</p>
-            <div class="tile-logo"><span class="tl-mark" style="background:#B4553D;">C</span><span class="tl-name">Cattleyard<em>Studio, Austin</em></span></div>
-          </div>
-          <div class="tile">
-            <div class="t">Ana asked us to research and shortlist 80 acquisition targets:</div>
-            <div class="d"><p>We're looking to buy two or three small companies this year. HVAC, mostly owner-operated, roughly $1–5M in revenue, southeast US.</p><p>What I need is a real list — not an Apollo export, I've tried that and it's useless. I mean each company screened one at a time against our criteria: does this fit, who owns it, are they old enough to be thinking about an exit, and is there any signal at all that they'd take the call. Plus contact details that actually work. I've been doing this myself at night after the kids are down, and at that pace it takes me until 2027. I would much rather have 40 targets that are genuinely right than 300 I have to re-screen myself.</p></div>
-            <div class="mtitle">Under 24 hours later, we agreed on these 5 metrics:</div>
-            <ul class="mlist"><li>612 companies screened against your written criteria</li><li>80 profiled targets with owner name and direct line</li><li>Succession signal scored on every one of the 80</li><li>94% of phone numbers verified as reaching the owner directly</li><li>Sourcing notes attached so you can re-run the screen yourself</li></ul>
-            <p class="mclose">We did this for a $5,500 flat fee in 3 weeks.</p>
-            <div class="tile-logo"><span class="tl-mark" style="background:#8F5F1E;">M</span><span class="tl-name">Marrow &amp; Kline<em>Capital</em></span></div>
-          </div>
-          <div class="tile">
-            <div class="t">Tom asked us to run a vendor migration across 6 internal tools:</div>
-            <div class="d"><p>moving off 6 tools onto one platform. nobody here has done a migration before, me included.</p><p>theres data in all six and some of it matters and some really doesnt and of course nobody agrees on which is which.</p><p>then theres 40ish people who have to be told whats happening and retrained, and half of them will be annoyed about it no matter what we do.</p><p>if im honest the tooling is the easy part. its the forty people and the forty opinions. every meeting weve had about this has ended with no decisions made and i need somebody whose actual job is to chase that down, because right now that person is me, between other things</p></div>
-            <div class="mtitle">Under 24 hours later, we agreed on these 2 metrics:</div>
-            <ul class="mlist"><li>All 6 systems migrated with zero business days of downtime</li><li>43 staff trained and all 38 open decisions closed out with a named owner</li></ul>
-            <p class="mclose">We did this for a $7,000 flat fee in 5 weeks.</p>
-            <div class="tile-logo"><span class="tl-mark" style="background:#4A4F58;">L</span><span class="tl-name">Ledgerhouse<em>Group</em></span></div>
+            <div class="t">Jason asked us to cold call potential customers:</div>
+            <div class="d"><p>We manufacture dental prosthetics. Crowns, bridges, that whole category. We sell direct to the practices instead of going through distributors. Our growth so far has been almost all referral, and it has flattened out over the last two quarters. I have a list of roughly 1,000 practices across Texas and not one person calling them.</p><p>What matters most to me is who is actually on the phone. I have tried overseas call centers twice now. Both times the practice manager could tell inside ten seconds and hung up on us. I need Americans, twenties or thirties, genuinely charismatic, the kind of person who can hold a dentist's attention while he is between patients and has no interest in talking. I would far rather have five excellent callers than twenty cheap ones!</p><p>Overall there's basically 2 things I care about. 1) They close the sale on the call. 2) They book me for an in-person meeting, with clear interest shown beforehand, and then I or one of my guys will drive out to meet them. I want crazy good conversion on this whole ordeal. And when someone does buy, the handoff to our invoicing team has to be clean. That part is not negotiable!</p></div>
+            <div class="mtitle">Under 24 hours later, we agreed on these metrics:</div>
+            <ul class="mlist"><li>All 1,000 Texas practices called by US-based callers, each screened on a live mock call before they touch your list</li><li>Any practice we cannot reach gets 3 further attempts across different days and times before it is marked closed</li><li>10 purchase commitments taken over the phone and handed to your invoicing team the same day</li><li>25 in-person meetings booked straight into your calendar, routed by geography so the drives make sense</li><li>1 in every 15 calls reviewed for tone and effort, and any caller who is coasting comes off the account</li></ul>
+            <p class="mclose">We did the first 1,000 calls for a $12,000 flat fee in 14 days, and then moved to a $1,000/week retainer for follow-ups and returning calls, to be eventually cancelled at Jason's discretion.</p>
+            <div class="tile-logo"><img class="tl-lockup" src="qlab.png" alt="Q Lab"><span class="tl-name"><em>Dental lab, Austin</em></span></div>
           </div>
         </div>
       </div>
-      <div class="marq-scroll" id="marqScroll"><div class="marq-thumb" id="marqThumb"></div></div>
+      <button class="marq-next" id="marqNext" type="button" aria-label="Show the next example">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
     </div>
   </div>
 </section>
@@ -816,7 +810,7 @@
     </div>
     <div class="mcap m1"><p><em class="stepno">Step 1</em>Send us a rough description.</p></div>
     <div class="mcap m2"><p><em class="stepno">Step 2</em>We'll send you an exact list of what we'll do, and an exact price — usually two quotes, so you pick what's best.</p></div>
-    <div class="mcap m3"><p><em class="stepno">Step 3</em>Sign and pay in one link.<br>We start immediately.</p><span class="sm">Every metric is on the doc you sign. From there we keep you posted over text — ask us anything, any time.</span></div>
+    <div class="mcap m3"><p><em class="stepno">Step 3</em>Sign and pay in one link.<br>We start immediately.</p></div>
     <div class="mpanel p1" id="mp1">
       <div class="bframe">
         <div class="bbar"><i></i><i></i><i></i><span>hiregrain.com</span></div>
@@ -866,7 +860,7 @@
             <li>Notices answered within 48 hours</li>
           </ul>
           <div class="signfoot">
-            <span class="signsig"><em>Amari Smith</em><i><span class="pulse"></span>signed</i></span>
+            <span class="signsig"><em>Amari Smith</em></span>
             <span class="signbtn">Sign &amp; pay</span>
           </div>
         </div>
@@ -896,14 +890,12 @@
             <button class="vid-play" type="button" aria-label="Play the explainer video">
               <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M8 5.2v13.6L19 12z" fill="currentColor"/></svg>
             </button>
-            <span class="vid-meta">Explainer film · 2:04 · coming soon</span>
+            <span class="vid-meta">2:04 · coming soon</span>
           </div>
         </div>
         <div class="vid-script">
-          <p class="vid-script-label">Prefer to read it? Here's the whole thing.</p>
-          <p>First, describe what you need. Text it, email it, or hop on a short call — whichever is least effort for you. It does not need to be organized, and it does not need to be complete. Most people send us three messy sentences and a couple of attachments, and that is genuinely enough to start from. From there we will go back and forth a bit, usually over the same day, asking the handful of questions that actually change the shape of the work. That back-and-forth is our job, not yours: you should not have to figure out what you are asking for before you are allowed to ask for it.</p>
-          <p>Then we send you an exact list of the metrics we are going to hit, along with a flat fee. Not a vague statement of work and not an hourly estimate that drifts — specific, countable things that will either be true when we are finished or will not. This is the stage where you push back. Cut a metric you do not care about, add one we missed, tighten a number until it matches what you actually need. Nothing starts until you have approved that list, and once you have, the price does not move. Later, you receive the finished work. If we miss any of the metrics on the list, you get your money back — the measurement is the whole product, so we do not get to grade our own homework.</p>
-          <p>It is a complete white-glove service. You tell us what needs to happen and we do it, including the coordination, the chasing, the forty small decisions nobody wants to own. The entire goal is to limit the amount of your time this consumes, because your time is the expensive part. There are two ways to come at it. You can give us an exact price range, and we will fit the strongest set of metrics we can inside it. Or you can give us the task with no number attached, and we will come back with the lowest price we can honestly do it for. Either way you see the full list and the full cost before anyone starts working.</p>
+          <p class="vid-script-label">Transcript:</p>
+          <p class="vid-soon">Coming soon</p>
         </div>
       </div>
     </div>
@@ -921,19 +913,12 @@
         <span class="founder-fallback">RJ</span>
       </div>
       <div class="founder-body">
-        <h2>Why we founded this.</h2>
-        <p>I kept watching founders lose weeks to projects that were nobody's actual job — the migration, the cleanup, the thing that needed six people to agree. So we built the company I wanted to hire.</p>
-        <button class="founder-cta" type="button" id="founderArticle" aria-expanded="false" aria-controls="founderArticleBody">
-          <span id="founderCtaLabel">Read the whole thing</span>
+        <h2>Grain lore.</h2>
+        <p>Yo, I'm Rhett, the cofounder. I previously made <a class="lore-link" href="https://www.ridecased.com" target="_blank" rel="noopener">Cased</a>, a bike clothing business, and I also study economic development in low-income countries.</p><p>When I made my first website for Cased, I wasted $5k on some Fiverr dude. That was lame. When I started running static ads, I then blew $10k on an unvetted agency, which was super lame. Sourcing was always a shitty time. Upwork was such a hassle.</p><p>Then, one day, I was meditating under a tree, and I came to a profound realization of how to make a lot of money: Make a fantastically better version of Upwork! So, for the past year, my cofounder Kyle and I went deep into the talent industry. We met with&hellip;</p>
+        <button class="founder-cta" type="button" id="founderArticle">
+          <span id="founderCtaLabel">Read more</span>
           <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
         </button>
-        <span class="founder-sig">Rhett Jones · Founder</span>
-        <div class="founder-article" id="founderArticleBody" hidden>
-          <p>[Placeholder — drop the real essay in here.]</p>
-          <p>Every company I have worked at had a list of things that mattered and that nobody owned. Not because they were hard, and not because nobody was capable. They sat there because they crossed four people, and crossing four people is its own full-time job.</p>
-          <p>The usual answers are a contractor, an agency, or a hire. A contractor does the piece you specified and stops at the edge of it. An agency wants a retainer before it will tell you anything specific. A hire takes three months to land and only makes sense if the work is permanent.</p>
-          <p>So we built the thing in the middle: you describe the problem in whatever shape it is in, and you get back a fixed price and an exact list of what will be true when we are done. If we miss any of it, you do not pay. The measurement is the product.</p>
-        </div>
       </div>
     </div>
   </div>
@@ -951,7 +936,7 @@
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
             <span>Speak it</span>
           </button>
-          <button class="ws-esc" type="button" data-sms>text us instead: 512-653-9872</button>
+          <button class="ws-esc" type="button" data-sms>text us questions: 512-653-9872</button>
         </div>
       </div>
   </div>
@@ -1066,73 +1051,18 @@ document.querySelectorAll('.rv').forEach(el => io.observe(el));
 
 /* ============ MARQUEE ============ */
 const track = document.getElementById('marqTrack');
-track.innerHTML += track.innerHTML;
-/* auto-scroll the examples, but let people take over with the scrollbar */
+/* three examples: side by side on desktop, one per screen with an arrow on phones */
 (function () {
   const lane = track.parentElement;
-  const bar = document.getElementById('marqScroll');
-  const thumb = document.getElementById('marqThumb');
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let nudged = 0, carry = 0, last = 0, expected = -1, dragging = false;
-  const half = () => track.scrollWidth / 2;
-  const touch = () => nudged = performance.now();
-  function setLeft(v) { lane.scrollLeft = v; expected = lane.scrollLeft; }
-
-  // only a scroll we did NOT cause counts as the user taking over
-  lane.addEventListener('scroll', () => {
-    if (Math.abs(lane.scrollLeft - expected) > 2) touch();
-    expected = lane.scrollLeft;
-    paint();
+  const next = document.getElementById('marqNext');
+  if (!next) return;
+  next.addEventListener('click', () => {
+    const card = track.children[0];
+    if (!card) return;
+    const step = card.getBoundingClientRect().width + 18;
+    const atEnd = lane.scrollLeft + lane.clientWidth >= lane.scrollWidth - 8;
+    lane.scrollTo({ left: atEnd ? 0 : lane.scrollLeft + step, behavior: 'smooth' });
   });
-  // A mouse press is deliberate. A finger is only deliberate once it moves
-  // sideways or lifts as a tap — scrolling the page past this lane is not.
-  lane.addEventListener('pointerdown', e => { if (e.pointerType === 'mouse') touch(); });
-  let tx = 0, ty = 0, tMoved = false;
-  lane.addEventListener('touchstart', e => {
-    const t = e.touches[0]; tx = t.clientX; ty = t.clientY; tMoved = false;
-  }, { passive: true });
-  lane.addEventListener('touchmove', e => {
-    const t = e.touches[0];
-    const dx = Math.abs(t.clientX - tx), dy = Math.abs(t.clientY - ty);
-    if (dx > 8 || dy > 8) tMoved = true;
-    if (dx > dy && dx > 8) touch();
-  }, { passive: true });
-  lane.addEventListener('touchend', () => { if (!tMoved) touch(); }, { passive: true });
-
-  function paint() {
-    const span = half() || 1;
-    const frac = Math.min(1, lane.clientWidth / span);
-    const w = Math.max(56, bar.clientWidth * frac);
-    thumb.style.width = w + 'px';
-    thumb.style.left = ((lane.scrollLeft % span) / span) * (bar.clientWidth - w) + 'px';
-  }
-  function seek(clientX) {
-    const r = bar.getBoundingClientRect();
-    const w = thumb.offsetWidth;
-    const t = Math.max(0, Math.min(1, (clientX - r.left - w / 2) / (r.width - w)));
-    setLeft(t * half());
-    touch(); paint();
-  }
-  bar.addEventListener('pointerdown', e => {
-    dragging = true; bar.setPointerCapture(e.pointerId); seek(e.clientX);
-  });
-  bar.addEventListener('pointermove', e => { if (dragging) seek(e.clientX); });
-  ['pointerup', 'pointercancel'].forEach(e => bar.addEventListener(e, () => dragging = false));
-
-  function frame(now) {
-    const dt = last ? Math.min(now - last, 50) : 0;
-    last = now;
-    if (!reduce && !dragging && now - nudged > 2200) {
-      carry += dt * 0.032;
-      const step = Math.floor(carry);
-      if (step) { carry -= step; setLeft(lane.scrollLeft + step); }
-    }
-    if (lane.scrollLeft >= half()) setLeft(lane.scrollLeft - half());
-    paint();
-    requestAnimationFrame(frame);
-  }
-  addEventListener('resize', paint);
-  requestAnimationFrame(frame);
 })();
 
 /* ============ INTAKE FLOW ============ */
@@ -1212,6 +1142,58 @@ document.querySelectorAll('[data-cta-send]').forEach(btn => {
   editor.addEventListener('blur', show);
   tick();
 })();
+
+/* phone: +cc stays locked on +1 until it is clicked, number formats as 3-3-4 */
+(function () {
+  const cc = document.getElementById('fCC');
+  const num = document.getElementById('fPhone');
+  if (!cc || !num) return;
+
+  cc.addEventListener('mousedown', () => {
+    if (!cc.readOnly) return;
+    cc.readOnly = false;
+    cc.classList.add('editing');
+    setTimeout(() => cc.select(), 0);
+  });
+  cc.addEventListener('input', () => {
+    const d = cc.value.replace(/\D/g, '').slice(0, 4);
+    cc.value = '+' + d;
+  });
+  cc.addEventListener('blur', () => {
+    if (!/^\+\d{1,4}$/.test(cc.value)) cc.value = '+1';
+    cc.readOnly = true;
+    cc.classList.remove('editing');
+    syncCountry();
+  });
+
+  // +1 is forced to 10 digits as xxx-xxx-xxxx; every other country is left alone,
+  // since national formats and lengths vary far too much to guess at
+  const isUS = () => cc.value === '+1';
+  const fmt = d => {
+    if (!isUS()) return d.slice(0, 15);
+    d = d.slice(0, 10);
+    if (d.length <= 3) return d;
+    if (d.length <= 6) return d.slice(0, 3) + '-' + d.slice(3);
+    return d.slice(0, 3) + '-' + d.slice(3, 6) + '-' + d.slice(6);
+  };
+  function reformat(keepCaret) {
+    const before = keepCaret ? num.value.slice(0, num.selectionStart).replace(/\D/g, '').length : null;
+    num.value = fmt(num.value.replace(/\D/g, ''));
+    if (before === null) return;
+    let pos = 0, seen = 0;
+    while (pos < num.value.length && seen < before) { if (/\d/.test(num.value[pos])) seen++; pos++; }
+    num.setSelectionRange(pos, pos);
+  }
+  num.addEventListener('input', () => reformat(true));
+  function syncCountry() {
+    num.placeholder = '';
+    reformat(false);
+  }
+})();
+function fullPhone() {
+  const num = document.getElementById('fPhone').value.trim();
+  return num ? document.getElementById('fCC').value + ' ' + num : '';
+}
 
 /* voice input — used by the hero box and the closing box */
 function wireMic(micId, target, after) {
@@ -1304,14 +1286,18 @@ function fieldOk(id, test) {
 document.getElementById('submitBtn').addEventListener('click', () => {
   const emailV = document.getElementById('fEmail').value.trim();
   const phoneV = document.getElementById('fPhone').value.trim();
-  const okName = fieldOk('fName', v => v.length >= 2);
+  const okName = fieldOk('fName', v => /^\S+\s+\S+/.test(v));
   const okEmail = fieldOk('fEmail', v => !v || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v));
-  const okPhone = fieldOk('fPhone', v => !v || v.replace(/\D/g, '').length >= 7);
+  const usPhone = document.getElementById('fCC').value === '+1';
+  const okPhone = fieldOk('fPhone', v => {
+    const d = v.replace(/\D/g, '');
+    return !v || (usPhone ? d.length === 10 : d.length >= 6);
+  });
   const hasContact = (phoneV && okPhone) || (emailV && okEmail);
   const err2 = document.getElementById('err2');
   if (!okName || !okEmail || !okPhone || !hasContact) {
-    err2.textContent = !okName ? 'Your name goes there.'
-      : !okPhone ? 'That phone number doesn\u2019t look right.'
+    err2.textContent = !okName ? 'We need your first and last name.'
+      : !okPhone ? (usPhone ? 'A +1 number needs all 10 digits.' : 'That phone number doesn\u2019t look right.')
       : !okEmail ? 'That email doesn\u2019t look right.'
       : 'We need a phone number or an email to get back to you.';
     err2.classList.add('on');
@@ -1323,7 +1309,7 @@ document.getElementById('submitBtn').addEventListener('click', () => {
     text: editor.value.trim(),
     name: document.getElementById('fName').value.trim(),
     email: document.getElementById('fEmail').value.trim(),
-    phone: document.getElementById('fPhone').value.trim(),
+    phone: fullPhone(),
     company: document.getElementById('fCo').value.trim(),
     pref, at: new Date().toISOString()
   };
@@ -1334,8 +1320,8 @@ document.getElementById('submitBtn').addEventListener('click', () => {
   } catch (e) {}
   document.getElementById('rcvText').innerHTML = markUp(record.text, findHighlights(record.text));
   document.getElementById('rcvNote').textContent = record.phone
-    ? `We\u2019ll text you back from 512-653-9872 to ${record.phone} within one business day.`
-    : `We\u2019ll email you back at ${record.email} within one business day.`;
+    ? `We\u2019ll text you back from +1 512-653-9872 to ${record.phone} within one day.`
+    : `We\u2019ll email you back at ${record.email} within one day.`;
   setStep(2);
 });
 
@@ -1368,20 +1354,6 @@ document.getElementById('submitBtn').addEventListener('click', () => {
   });
 })();
 
-/* founder essay toggle */
-(function () {
-  const btn = document.getElementById('founderArticle');
-  const body = document.getElementById('founderArticleBody');
-  const label = document.getElementById('founderCtaLabel');
-  if (!btn) return;
-  btn.addEventListener('click', () => {
-    const open = body.hidden;
-    body.hidden = !open;
-    btn.setAttribute('aria-expanded', String(open));
-    label.textContent = open ? 'Close' : 'Read the whole thing';
-  });
-})();
-
 /* ============ MORPH ENGINE (scroll-scrubbed) ============ */
 (function () {
   const wrap = document.getElementById('morphWrap');
@@ -1391,7 +1363,7 @@ document.getElementById('submitBtn').addEventListener('click', () => {
   const panels = [document.getElementById('mp1'), document.getElementById('mp2'), document.getElementById('mp3')];
   const mfLight = document.getElementById('mfLight'), mfInk = document.getElementById('mfInk');
   // panel 1: screen-recording typing demo
-  const TAX = "I need to file taxes for the year, but I have 2 companies incorporated in other countries. I want to make sure I do it right and save as much money as possible. Let me send you the PDFs for both companies\u2026";
+  const TAX = "I'm a UK citizen but living internationally. I need to file taxes for the year, but I have 2 companies incorporated in other countries. I want to make sure I do it right and save as much money as possible. Let me send you the PDFs for both companies";
   const btype = document.getElementById('btype');
   let typeTimer = null, typing = false;
   function startTypeDemo() {
@@ -1401,7 +1373,7 @@ document.getElementById('submitBtn').addEventListener('click', () => {
     const step = () => {
       if (!typing) return;
       if (i < TAX.length) { btype.textContent = TAX.slice(0, ++i); typeTimer = setTimeout(step, 22 + Math.random() * 30); }
-      else { typeTimer = setTimeout(() => { if (typing) { i = 0; btype.textContent = ''; typeTimer = setTimeout(step, 900); } }, 3200); }
+      else { typeTimer = setTimeout(() => { if (typing) { i = 0; btype.textContent = ''; typeTimer = setTimeout(step, 260); } }, 1500); }
     };
     typeTimer = setTimeout(step, 40); // start typing the moment the panel appears
   }
