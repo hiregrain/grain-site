@@ -31,7 +31,6 @@
   /* ONE viewport-fixed sky shared by every section — boundaries can never mismatch */
   .wash { z-index:1; background:
     radial-gradient(1100px 640px at 78% -6%, rgba(var(--indigo),0.16), transparent 62%),
-    radial-gradient(980px 560px at -6% 105%, rgba(var(--amber),0.10), transparent 60%),
     radial-gradient(700px 440px at 50% 62%, rgba(var(--indigo),0.05), transparent 70%);
     background-attachment:fixed; }
   .fielddots { z-index:2; background-size:var(--grid) var(--grid); background-attachment:fixed; }
@@ -103,7 +102,7 @@
     text-transform:none; color:var(--ink-sub); max-width:520px; margin:16px auto 0; }
   .mcap.m2 .sm { font-family:var(--sans); font-size:17px; letter-spacing:-0.1px; line-height:1.45; text-transform:none; color:var(--td); opacity:.92; max-width:360px; margin-left:auto; margin-top:18px; }
   .mcap.m1 { left:8%; top:38%; color:var(--td); }
-  .mcap.m2 { right:8%; top:42%; color:var(--td); text-align:right; max-width:380px; }
+  .mcap.m2 { right:8%; top:50%; transform:translateY(-50%); color:var(--td); text-align:right; max-width:380px; }
   /* a soft scrim so the caption reads over the moving dot field */
   .mcap.m2::before { content:''; position:absolute; inset:-54px -60px; z-index:-1; pointer-events:none;
     border-radius:50%; backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
@@ -130,19 +129,17 @@
   @media (max-width: 860px) { .how-wm { font-size:44px; } .mcap.m0::before { width:380px; } }
   .mpanel { position:absolute; width:min(440px, 40vw); opacity:0; z-index:3; }
   .mpanel .bframe, .mpanel .pdoc { box-shadow:0 30px 80px rgba(0,0,0,0.35); }
+  .p3 .pdoc { box-shadow:0 10px 28px rgba(29,32,37,0.10); }
   .p1 { right:7%; top:26%; }
-  .p2 { left:5%; top:16%; width:min(560px, 46vw); }
+  .p2 { left:5%; top:50%; transform:translateY(-50%); width:min(560px, 46vw); }
   .p3 { left:50%; top:58%; transform:translateX(-50%); width:min(620px, 88vw); }
   .signrow { display:grid; grid-template-columns:1.15fr 1fr; gap:18px; align-items:start; }
   .signlist { list-style:none; margin:0 0 14px; padding:0; }
   /* the signed doc reads as complete — it does not use the staged reveal
      that .pdoc li inherits from the quote card */
   .pdoc .signlist li { position:relative; font-size:11.5px; line-height:1.3; color:#1D2025;
-    padding:0 0 0 20px; margin-bottom:9px; opacity:1; transform:none; transition:none; }
-  .pdoc .signlist li::before { content:''; position:absolute; left:2px; top:2px; width:11px; height:11px;
-    border-radius:3px; background:#3A4048; }
-  .pdoc .signlist li::after { content:''; position:absolute; left:5.4px; top:4.4px; width:3.5px; height:6.5px;
-    border:solid #fff; border-width:0 1.6px 1.6px 0; transform:rotate(43deg); }
+    padding:0 0 0 16px; margin-bottom:9px; opacity:1; transform:none; transition:none; }
+  .pdoc .signlist li::before { content:''; position:absolute; left:3px; top:6px; width:5px; height:5px; border-radius:50%; background:#1D2025; }
   .signfoot { display:flex; align-items:center; justify-content:space-between; gap:12px;
     border-top:1px solid rgba(29,32,37,0.14); padding-top:13px; }
   .signsig em { display:block; font-family:'Snell Roundhand','Apple Chancery',cursive; font-style:italic;
@@ -180,15 +177,32 @@
   .pdoc-head { display:flex; justify-content:space-between; gap:12px; font-family:var(--disp); font-weight:500; font-size:13px; letter-spacing:-0.1px; color:#1D2025; border-bottom:1px solid #1D2025; padding-bottom:10px; margin-bottom:12px; }
   .pdoc ul { list-style:none; margin:0; padding:0; }
   .pdoc li { font-size:13.5px; line-height:1.55; padding:5px 0 5px 20px; position:relative; opacity:0; transform:translateY(6px); transition:opacity .45s var(--ease), transform .45s var(--ease); }
-  .pdoc li::before { content:''; position:absolute; left:2px; top:12px; width:6px; height:6px; border-radius:50%; background:#8F5F1E; }
+  .pdoc li::before { content:''; position:absolute; left:2px; top:12px; width:6px; height:6px; border-radius:50%; background:rgba(29,32,37,0.55); }
   .mpanel.play .pdoc li { animation:revealup .45s var(--ease) forwards; }
   .mpanel.play .pdoc li:nth-child(1){animation-delay:.15s} .mpanel.play .pdoc li:nth-child(2){animation-delay:.45s}
   .mpanel.play .pdoc li:nth-child(3){animation-delay:.75s} .mpanel.play .pdoc li:nth-child(4){animation-delay:1.05s}
   .mpanel.play .pdoc li:nth-child(5){animation-delay:1.35s}
   .pdoc-foot { display:flex; justify-content:space-between; align-items:baseline; border-top:1px solid rgba(29,32,37,0.16); margin-top:12px; padding-top:11px; font-family:var(--mono); }
   .pdoc-foot span { font-size:9.5px; letter-spacing:.13em; color:#5D616A; }
-  .pdoc-foot b { font-size:17px; color:#8F5F1E; font-weight:500; opacity:0; transition:opacity .4s var(--ease) 1.7s; }
+  .pdoc-foot b { font-size:17px; color:var(--ink); font-weight:500; opacity:0; transition:opacity .4s var(--ease) 1.7s; }
   .mpanel.play .pdoc-foot b { opacity:1; }
+  .pdoc-sow .pdoc-head { font-size:12.5px; align-items:baseline; }
+  .pd-mark { font-family:var(--disp); font-weight:500; font-size:15px; letter-spacing:-0.3px; color:#1D2025; }
+  .pd-block { padding:12px 0 10px; border-bottom:1px solid rgba(29,32,37,0.10); }
+  .pd-block:last-of-type { border-bottom:none; }
+  .pd-eyebrow { font-family:var(--mono); font-size:10px; letter-spacing:.13em; text-transform:uppercase; color:#5D616A; margin:0 0 10px; display:flex; align-items:center; gap:8px; }
+  .pd-dir { display:inline-flex; align-items:center; justify-content:center; min-width:30px; height:18px; padding:0 7px; border-radius:9px; background:#1D2025; color:#F5F4F1; font-family:var(--mono); font-size:9.5px; letter-spacing:.12em; }
+  .pd-check { list-style:none; margin:0; padding:0; }
+  .pdoc .pd-check li { position:relative; font-size:13px; line-height:1.5; color:#1D2025; padding:0 0 0 20px; margin:0 0 7px; }
+  .pdoc .pd-check li::before { content:''; position:absolute; left:4px; top:8px; width:5px; height:5px; border-radius:50%; background:#1D2025; }
+  .pd-foot { display:flex; flex-wrap:wrap; gap:12px 24px; border-top:1px solid #1D2025; margin-top:14px; padding-top:12px; }
+  .pd-foot span { display:flex; flex-direction:column; gap:2px; }
+  .pd-foot em { font-family:var(--mono); font-style:normal; font-size:9.5px; letter-spacing:.13em; text-transform:uppercase; color:#5D616A; }
+  .pd-foot b { font-family:var(--disp); font-weight:500; font-size:13.5px; color:#1D2025; letter-spacing:-0.1px; }
+  .pdoc-sow li, .mpanel.play .pdoc-sow li { opacity:1; transform:none; animation:none; }
+  /* the section's floor fades into the page so the seam below it is soft on every side */
+  .morph-sticky::after { content:''; position:absolute; left:0; right:0; bottom:0; height:16vh; z-index:2; pointer-events:none;
+    background:linear-gradient(180deg, rgba(245,244,241,0) 0%, rgba(245,244,241,0.85) 70%, #F5F4F1 100%); opacity:var(--seam, 0); transition:opacity .3s; }
   .mkicker { font-family:var(--sans); font-weight:500; font-size:11.5px; color:#5D616A; margin-bottom:11px; }
   .mgrid { display:grid; grid-template-columns:repeat(2, 1fr); gap:10px; }
   .mbox { position:relative; overflow:hidden; border-radius:10px; padding:15px 16px 17px;
@@ -242,8 +256,16 @@
        out-rank this one, so the offsets have to be forced off for the stack */
     .mcap, .mpanel { position:relative;
       left:auto !important; right:auto !important; top:auto !important; bottom:auto !important;
-      width:100%; max-width:none;
-      opacity:1 !important; transform:none !important; padding:0 20px; }
+      width:100%; max-width:none; padding:0 20px;
+      opacity:0 !important; transform:translateY(16px) !important;
+      transition:opacity .7s var(--ease), transform .7s var(--ease); }
+    .mcap.in, .mpanel.in { opacity:1 !important; transform:none !important; }
+    .morph-sticky { background:var(--dark); transition:background-color .2s linear; }
+    .morph-sticky .fielddots { position:absolute; inset:0; }
+    .morph-sticky.lit .mcap.m3 { color:var(--ink); }
+    .morph-sticky.lit .mcap.m3 .sm { color:var(--ink-sub); }
+    .morph-sticky.lit .mcap.m3 .stepno { color:#5C67C4; }
+    .morph-sticky::after { bottom:0; height:12vh; }
     .mcap { text-align:left; margin-bottom:20px; }
     .mcap p { font-size:24px; }
     .mcap .sm { font-size:14px; color:var(--td-mut); max-width:none; margin-left:0; }
@@ -270,7 +292,7 @@
 
   /* ---------- HERO ---------- */
   .hero-sec { position:relative; overflow:hidden; background:var(--dark);
-    min-height:86vh; min-height:86svh; display:flex; flex-direction:column; }
+    min-height:100vh; min-height:100svh; display:flex; flex-direction:column; }
   .hero-sec > .wrap { flex:1; display:flex; flex-direction:column; width:100%; }
   .hero { flex:1; display:flex; flex-direction:column; justify-content:center;
     padding:16px 0 36px; max-width:860px; margin:0 auto; text-align:center; width:100%; }
@@ -327,7 +349,7 @@
   .prog { display:flex; gap:9px; margin-bottom:20px; }
   .prog i { width:6px; height:6px; border-radius:50%; background:rgba(237,238,242,0.16); transition:background .35s var(--ease), transform .35s var(--ease); }
   .prog i.on { background:var(--td); }
-  .prog i.now { background:rgba(var(--amber),0.9); transform:scale(1.25); }
+  .prog i.now { background:rgb(var(--accent)); transform:scale(1.25); }
   .wstep { display:none; }
   .wstep.on { display:block; animation:stepin .4s var(--ease); }
   @keyframes stepin { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
@@ -344,11 +366,11 @@
   @media (prefers-reduced-motion: reduce) { .gtcaret { animation:none; } }
   .mic { display:inline-flex; align-items:center; gap:8px; font-size:13.5px; color:var(--td-sub); background:none; border:1px solid rgba(237,238,242,0.22); border-radius:32px; height:44px; padding:0 18px; cursor:pointer; font-family:var(--sans); transition:border-color .2s, color .2s; }
   .mic:hover { border-color:rgba(237,238,242,0.5); color:var(--td); }
-  .mic.rec { border-color:rgba(232,179,107,0.7); color:rgb(var(--amber)); }
+  .mic.rec { border-color:rgba(var(--accent),0.7); color:rgb(var(--accent)); }
   .mic.rec svg { animation:ppulse2 1.4s var(--ease) infinite; }
   @keyframes ppulse2 { 50% { opacity:.5; } }
   .fld-note { font-size:12.5px; color:var(--td-mut); margin:-8px 0 18px; }
-  .backdrop .hl { color:var(--td); border-bottom:1px solid rgba(var(--amber),0.6); }
+  .backdrop .hl { color:var(--td); border-bottom:1px solid rgba(var(--accent),0.7); }
   .editor { position:relative; z-index:2; background:transparent; border:none; outline:none; resize:none; color:transparent; caret-color:var(--td); min-height:160px; display:block; }
   .ws-tools { display:flex; align-items:center; gap:18px; margin-top:16px; padding-top:16px; border-top:1px solid var(--line-d); flex-wrap:wrap; }
   .ws-send { font-size:15px; font-weight:500; border:none; border-radius:32px; height:44px; padding:0 24px; cursor:pointer; background:var(--td); color:var(--dark); font-family:var(--sans); transition:opacity .2s; }
@@ -409,7 +431,7 @@
 
   .rcv-big { font-family:var(--disp); font-weight:500; font-size:26px; letter-spacing:-0.4px; margin:2px 0 16px; animation:stepin .5s var(--ease); }
   .rcv .doc { border:1px solid var(--line-d); border-radius:12px; padding:20px 24px; margin-bottom:18px; font-size:15px; line-height:1.7; color:var(--td-sub); }
-  .rcv .doc .hl { color:var(--td); border-bottom:1px solid rgba(var(--amber),0.6); }
+  .rcv .doc .hl { color:var(--td); border-bottom:1px solid rgba(var(--accent),0.7); }
   .rcv .meta { font-family:var(--sans); font-size:13px; color:var(--td-mut); margin-bottom:10px; }
   .rcv-note { font-size:14.5px; color:var(--td-sub); max-width:560px; line-height:1.6; text-wrap:pretty; }
   .rcv-note span { color:var(--td); }
@@ -450,10 +472,10 @@
   .band-sec .noise { opacity:.35; }
   .body-sec { position:relative; overflow:hidden; background:var(--bone); color:var(--ink); }
   .body-sec .noise { opacity:.35; }
-  .marq-band { padding:36px 0 8px; }
+  .marq-band { padding:64px 0 72px; }
   .tile .t { padding-bottom:2px; letter-spacing:-0.1px; }
   .band-label { display:flex; align-items:center; justify-content:center; gap:9px; font-family:var(--disp);
-    font-weight:500; font-size:15px; letter-spacing:-0.2px; color:var(--ink); margin-bottom:24px; text-align:center; }
+    font-weight:500; font-size:15px; letter-spacing:-0.2px; color:var(--ink); margin-bottom:30px; text-align:center; }
   .band-label::before { content:''; width:6px; height:6px; border-radius:50%; background:rgb(var(--accent)); }
   @media (max-width: 760px) {
     .band-label { display:block; padding:0 24px; }
@@ -462,9 +484,15 @@
   .marq-band { position:relative; }
   .marquee { overflow-x:auto; overflow-y:hidden; position:relative;
     scroll-behavior:smooth; scroll-snap-type:x mandatory;
-    scrollbar-width:none; -ms-overflow-style:none; padding:2px 40px 4px; }
+    scrollbar-width:none; -ms-overflow-style:none; padding:14px 40px 18px; }
   .marquee::-webkit-scrollbar { display:none; }
-  .marq-track { display:flex; gap:18px; align-items:stretch; width:100%; }
+  .marq-track { display:flex; gap:20px; align-items:stretch; width:100%; }
+  @media (min-width: 761px) and (max-width: 1280px) {
+    .tile.sow { padding:20px 20px 18px; }
+    .sow-ask { font-size:15px; }
+    .sow-list li { font-size:13.5px; margin-bottom:8px; }
+    .sow-foot b { font-size:14px; }
+  }
   .marq-next { position:absolute; top:50%; right:14px; transform:translateY(-50%);
     width:52px; height:52px; border-radius:50%; border:none; cursor:pointer; z-index:6;
     display:none; place-items:center; color:#fff; background:rgb(var(--accent));
@@ -476,10 +504,6 @@
   .tile { background:rgba(255,255,255,0.80); border:1px solid var(--line-l); border-radius:14px;
     padding:24px 26px 22px; flex:1 1 0; min-width:0; scroll-snap-align:center;
     display:flex; flex-direction:column; transition:border-color .2s var(--ease); }
-  .tile .d { font-size:11.5px; line-height:1.62; color:var(--ink-sub); margin-top:12px; flex:1;
-    padding-left:12px; border-left:2px solid rgba(var(--accent),0.28); }
-  .tile .d p { margin:0 0 9px; }
-  .tile .d p:last-child { margin-bottom:0; }
   .mtitle { font-family:var(--disp); font-weight:500; font-size:13.5px; letter-spacing:-0.1px;
     color:var(--ink); margin-top:18px; padding-top:15px; border-top:1px solid var(--line-l); }
   .mlist { list-style:none; margin:11px 0 0; padding:0; }
@@ -504,6 +528,56 @@
     .tile { flex:0 0 84vw; }
     .marq-next { display:grid; }
   }
+
+  /* scope-of-work example cards: the document, not the conversation */
+  .tile.sow { background:#FCFAF5; border:1px solid rgba(29,32,37,0.14); padding:22px 24px 20px; }
+  .sow-head { display:flex; justify-content:space-between; gap:12px; font-family:var(--mono); font-size:10.5px;
+    letter-spacing:.13em; text-transform:uppercase; color:#5D616A; border-bottom:1px solid #1D2025; padding-bottom:10px; }
+  .sow-ask { font-family:var(--disp); font-weight:500; font-size:16px; line-height:1.35; letter-spacing:-0.2px;
+    color:var(--ink); margin:14px 0 0; }
+  .sow-label { font-family:var(--mono); font-size:10.5px; letter-spacing:.13em; text-transform:uppercase;
+    color:#5D616A; margin:16px 0 8px; }
+  .sow-list { list-style:none; margin:0; padding:0; flex:1; }
+  .sow-list li { position:relative; font-size:14px; line-height:1.45; color:var(--ink); padding:0 0 0 20px; margin-bottom:9px; }
+  .sow-list li::before { content:''; position:absolute; left:3px; top:8px; width:6px; height:6px; border-radius:50%; background:rgba(29,32,37,0.55); }
+  .tile.sow { cursor:pointer; }
+  .tile.sow:focus-visible { outline:2px solid var(--ink); outline-offset:3px; }
+  .sow-open { font-family:var(--sans); font-weight:500; font-size:13px; color:var(--ink); margin:14px 0 0; }
+  .sow-open span { color:rgb(var(--accent)); }
+  .tile.sow:hover .sow-open span { margin-left:3px; }
+  .sow-modal { position:fixed; inset:0; z-index:60; display:grid; place-items:center; padding:24px; }
+  .sow-modal[hidden] { display:none; }
+  .sow-backdrop { position:absolute; inset:0; background:rgba(12,14,19,0.70); backdrop-filter:blur(3px); }
+  .sow-paper { position:relative; z-index:1; width:min(760px, 100%); max-height:calc(100vh - 48px); overflow:auto;
+    background:#FCFAF5; color:var(--ink); border-radius:14px; padding:40px 44px 36px;
+    box-shadow:0 30px 80px rgba(0,0,0,0.45); animation:sowin .28s var(--ease); }
+  @keyframes sowin { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
+  .sow-paper:focus { outline:none; }
+  .sow-x { position:absolute; top:14px; right:16px; width:34px; height:34px; border:none; background:none; border-radius:50%;
+    font-size:24px; line-height:1; color:var(--ink-sub); cursor:pointer; }
+  .sow-x:hover { background:rgba(29,32,37,0.07); color:var(--ink); }
+  .sow-sheet-head { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; border-bottom:1px solid var(--ink); padding-bottom:12px; margin-bottom:22px; }
+  .sow-eyebrow { font-family:var(--mono); font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; color:#5D616A; }
+  .sow-paper h3 { font-family:var(--disp); font-weight:500; font-size:26px; line-height:1.2; letter-spacing:-0.6px; margin:0 0 28px; max-width:600px; }
+  .sow-sec { display:block; margin:0 0 12px; }
+  .sow-raw { margin:0 0 30px; padding:18px 22px; border:1px solid rgba(29,32,37,0.12); background:rgba(255,255,255,0.55); border-radius:10px; }
+  .sow-raw p { font-family:var(--sans); font-size:15px; line-height:1.6; color:var(--ink-sub); margin:0 0 10px; }
+  .sow-raw p:last-child { margin:0; }
+  .sow-agreed { list-style:none; margin:0 0 30px; padding:0; }
+  .sow-agreed li { position:relative; font-size:15.5px; line-height:1.5; color:var(--ink); padding:0 0 0 24px; margin-bottom:11px; }
+  .sow-agreed li::before { content:''; position:absolute; left:4px; top:9px; width:6px; height:6px; border-radius:50%; background:rgba(29,32,37,0.55); }
+  .sow-sheet-foot { display:flex; flex-wrap:wrap; gap:16px 32px; border-top:1px solid rgba(29,32,37,0.16); padding-top:18px; }
+  .sow-sheet-foot span { display:flex; flex-direction:column; gap:4px; }
+  .sow-sheet-foot em { font-family:var(--mono); font-style:normal; font-size:10px; letter-spacing:.13em; text-transform:uppercase; color:#5D616A; }
+  .sow-sheet-foot b { font-family:var(--disp); font-weight:500; font-size:17px; letter-spacing:-0.2px; }
+  @media (max-width: 760px) { .sow-paper { padding:30px 22px 26px; border-radius:12px; } .sow-paper h3 { font-size:22px; } }
+  .sow-foot { display:flex; flex-wrap:wrap; gap:14px 22px; align-items:flex-end; border-top:1px solid rgba(29,32,37,0.16);
+    margin-top:14px; padding-top:12px; }
+  .sow-foot span { display:flex; flex-direction:column; gap:3px; }
+  .sow-foot em { font-family:var(--mono); font-style:normal; font-size:10px; letter-spacing:.13em; text-transform:uppercase; color:#5D616A; }
+  .sow-foot b { font-family:var(--disp); font-weight:500; font-size:15px; color:var(--ink); letter-spacing:-0.2px; }
+  .sow-foot .sow-logo { flex-direction:row; align-items:center; gap:8px; margin-left:auto; font-family:var(--disp);
+    font-weight:500; font-size:13px; color:var(--ink); }
   .tile:hover { border-color:rgba(var(--accent),0.40); }
   .tile .t { font-family:var(--disp); font-size:15px; font-weight:500; line-height:1.35; color:var(--ink); }
   .tile .m { font-family:var(--sans); font-weight:500; font-size:13px; color:var(--ink); margin-top:16px; padding-top:12px; border-top:1px solid var(--line-l); }
@@ -547,9 +621,9 @@
   .step h3 { font-family:var(--disp); font-weight:500; font-size:21px; letter-spacing:-0.3px; }
   .step p { font-size:15.5px; color:var(--ink-sub); line-height:1.55; }
 
-  .dusk-cta { position:relative; overflow:hidden; text-align:center; padding:110px 0 140px; background:var(--dark); color:var(--td); }
+  .dusk-cta { position:relative; text-align:center; padding:96px 0 40px; background:var(--bone); color:var(--ink); }
   .dusk-cta > .wrap { position:relative; z-index:3; }
-  .dusk-cta h2 { color:var(--td); }
+  .dusk-cta h2 { color:var(--ink); position:relative; z-index:3; }
   .dusk-cta .sec-sub { color:var(--td-sub); }
   .dusk-cta .pill { margin:40px auto 0; box-shadow:0 6px 24px rgba(26,26,26,0.10); border:1px solid rgba(29,32,37,0.14); }
   .dusk-cta .pill button { background:var(--ink); }
@@ -557,6 +631,15 @@
   .cta-row { display:flex; flex-direction:column; align-items:center; gap:16px; margin-top:36px; }
   .cta-box { max-width:720px; margin:36px auto 0; text-align:left; border:1px solid var(--line-l);
     border-radius:14px; padding:22px 26px 18px; background:rgba(255,255,255,0.70); }
+  .cta-actions { display:flex; flex-direction:column; align-items:center; gap:18px; margin-top:34px; position:relative; z-index:3; }
+  .cta-top { font-family:var(--sans); font-weight:500; font-size:17px; color:#F5F4F1; background:#1D2025;
+    border:none; border-radius:999px; padding:16px 30px; cursor:pointer;
+    transition:transform .18s var(--ease), background .18s var(--ease); }
+  .cta-top:hover { background:#000; transform:translateY(-1px); }
+  .cta-top:active { transform:translateY(0); }
+  .cta-text { font-family:var(--sans); font-size:14px; color:var(--ink-sub); background:none; border:none; cursor:pointer;
+    text-decoration:underline; text-underline-offset:4px; text-decoration-color:rgba(29,32,37,0.3); padding:4px 8px; }
+  .cta-text:hover { color:var(--ink); }
   .cta-box textarea { font-family:var(--sans); font-size:16px; line-height:1.7; width:100%; min-height:190px;
     background:transparent; border:none; outline:none; resize:none; color:var(--ink); display:block; padding:2px 0; }
   .cta-box textarea::placeholder { color:var(--ink-sub); opacity:.75; }
@@ -645,14 +728,19 @@
   .close-alt { margin-top:18px; font-size:14px; color:var(--td-mut); position:relative; z-index:3; }
   .close-alt a { color:var(--td-sub); text-decoration:underline; text-underline-offset:3px; }
 
-  .foot-giant { text-align:center; padding:90px 0 10px; overflow:hidden; }
-  .foot-giant .gword { font-family:var(--disp); font-weight:500; letter-spacing:-0.02em; font-size:clamp(120px, 22vw, 280px); line-height:.86;
+  .foot-giant { text-align:center; padding:56px 0 0; overflow:hidden; line-height:0; }
+  .foot-giant .gword { display:block; font-family:var(--disp); font-weight:500; letter-spacing:-0.02em; font-size:clamp(120px, 22vw, 280px); line-height:.86;
     background-image:radial-gradient(rgba(29,32,37,0.72) 2px, transparent 2.6px); background-size:11px 11px;
-    -webkit-background-clip:text; background-clip:text; color:transparent; }
-  footer { background:var(--bone); color:var(--ink); padding:30px 0 40px; position:relative; z-index:3; }
-  .foot-row { display:flex; justify-content:space-between; align-items:baseline; border-top:1px solid rgba(29,32,37,0.12); padding-top:28px; }
-  .foot-tag { font-family:var(--sans); font-size:14px; color:var(--ink-sub); margin-top:10px; }
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    -webkit-mask-image:linear-gradient(180deg, #000 30%, rgba(0,0,0,0) 96%); mask-image:linear-gradient(180deg, #000 30%, rgba(0,0,0,0) 96%); }
+  footer { background:var(--bone); color:var(--ink); padding:0 0 40px; position:relative; z-index:3; }
+  .foot-row { display:grid; grid-template-columns:1fr auto 1fr; align-items:baseline; border-top:1px solid rgba(29,32,37,0.12); padding-top:28px; }
+  .foot-row .legal { text-align:right; }
+  .foot-row .foot-nav { justify-content:center; }
   .legal { font-size:13px; color:var(--ink-sub); }
+  .foot-nav { display:flex; gap:22px; }
+  .foot-nav a { font-family:var(--sans); font-size:13.5px; color:var(--ink-sub); text-decoration:none; }
+  .foot-nav a:hover { color:var(--ink); opacity:1; }
 
   /* ---------- RESPONSIVE ---------- */
   @media (max-width: 960px) {
@@ -678,11 +766,14 @@
     .close-card { padding:56px 24px; }
     .dark-panel { padding:56px 22px 40px; border-radius:20px; }
     /* .86 line-height clips the g's descender against overflow:hidden */
-    .foot-giant { padding:56px 0 14px; overflow:visible; }
+    .foot-giant { padding:20px 0 0; overflow:hidden; }
     .foot-giant .gword { font-size:clamp(112px, 34vw, 200px); line-height:1.06;
       background-image:radial-gradient(rgba(29,32,37,0.72) 1.5px, transparent 2.1px);
       background-size:8px 8px; }
-    .foot-row { flex-direction:column; gap:16px; }
+    .foot-row { grid-template-columns:1fr; gap:16px; }
+    .foot-row .legal { text-align:left; }
+    .foot-row .foot-nav { justify-content:flex-start; }
+    .foot-nav { flex-wrap:wrap; gap:14px 20px; }
     .fielddots, .wash, .seam .mx1, .seam .mx2 { background-attachment:scroll; }
   }
 </style>
@@ -759,44 +850,6 @@
   </div>
 </section>
 
-<section class="band-sec on-light">
-  <div class="fielddots"></div><div class="noise"></div>
-  <div class="wrap" style="max-width:100%; padding:0; position:relative; z-index:3;">
-    <div class="marq-band" id="projects">
-      <div class="band-label rv">We do projects entirely for you, usually between $1,000 and $20,000.</div>
-      <div class="marquee rv rv2">
-        <div class="marq-track" id="marqTrack">
-          <div class="tile">
-            <div class="t">Sofia asked us to kit out her studio in Austin and buy the equipment:</div>
-            <div class="d"><p>We took a lease on a new 1,400 square ft space in Austin and I have about two weeks before the first shoots are booked. To give yu an idea, it needs a full lighting grid, a cyc wall, sound treatment, and two camera bodies with glass.   I do not have the budget to buy any of that new atm.</p><p>the used market here is fine but its a nightmare to actually work it well! SO we have tried facebook marketplace, a couple of local rental houses, i met some guy in san marcos with three arri kits. And we need to do this for over 10 items, and every one of them needs somebody to physically go look at the gear, test it, and haggle. i have driven out twice already and both were a waste of an afternoon tbh lol.</p><p>So what I actually need is a person on the ground here. Like ideally this is someone who can source the equipment, go and inspect it in person, and also hopefully negotiate with the FB Marketplace seller (or wherever else the buy it). Then they need to be in the room afterwards to rig the lighting and set the whole thing up for a couple days (this can be a diff person but ideally is the same).</p><p>TO be very clear I don not want a consultant who emails me a spreadsheet of options. A lot of this is just driving around in person!</p></div>
-            <div class="mtitle">Under 24 hours later, we agreed on these metrics:</div>
-            <ul class="mlist"><li>We'll source, inspect in-person, and buy all 11 items, and keep your total spend under $18,000.</li><li>We'll install the full lighting grid, the cyc wall and the acoustic treatment, and we'll confirm the room's power can carry the grid before confirming the purchases.</li><li>Our tech will be on-site for 2 days, and he'll do a full walkthrough with your DP before the first shoot.</li><li>If anything fails once it's rigged we'll replace it at our cost.</li><li>You'll get a receipt for every purchase (with condition notes and the seller's contact attached).</li></ul>
-            <p class="mclose">We did this for a $6,000 flat fee in 14 days.</p>
-          </div>
-          <div class="tile">
-            <div class="t">Almar asked us to build an internal course:</div>
-            <div class="d"><p>Hello there. I am Almar, the CTO of Reading Rooms. To give you context we are currently building out our 12th Grade Honors course (ELA / English). This will require making 30 different quizzes around 30 different standard essays. So we need to hire two people (or perhaps one person with both skills?)  to do the technical work of building the quizzes on our site, and all of the actual editorial work of choosing the right texts + writing the question choices. So the second part is ideal for a high school English teacher. Like that's not an engineer skillset, especially because they actually need to know regular ELA 12 coursework. Anyway. The platform and the CMS already exist, so nobody needs to write code. What the engineer needs to do is data entry into our question builder. But it has to be done by someone who knows what a good distractor question looks like. 2 contractors have tried this already and it wasn't great, I mean, both handed back questions where the correct answer was obvious. So to be very clear I would rather pay once for someone who actually knows the material. In a full hands-off way where I have to do no reviewing of this myself; right now I am the bottleneck and I want to get past this.</p></div>
-            <div class="mtitle">Under 24 hours later, we agreed on these metrics:</div>
-            <ul class="mlist"><li>We'll build 30 quizzes (live in your CMS) for each essay on the 12th Grade Honors list.</li><li>Every quiz will be written by a certified high school ELA teacher (10 questions each) with plausible distractors.</li><li>We'll run a full answer key review before handing it off, and we’ll rewrite anything you reject at no extra cost.</li></ul>
-            <p class="mclose">We did this for a $2,000 flat fee in 7 days.</p>
-            <div class="tile-logo"><img class="tl-mark" src="reading-rooms.png" alt="" width="32" height="32"><span class="tl-name">Reading Rooms<em>Education</em></span></div>
-          </div>
-          <div class="tile">
-            <div class="t">Jason asked us to cold call potential customers:</div>
-            <div class="d"><p>We at Q Lab manufacture dental prosthetics; crowns, bridges, that whole category. As it stands, the current focus of our sales is that we sell direct to the practices instead of going through distributors. Our growth so far has been almost all referral, and it has flattened out over the last year. Anyway, currently I have a list of roughly 1,000 practices across Texas, and I need someone to call them. I need someone to call them well!</p><p>What matters most to me is who is actually on the phone, can jam phones all day, but has the charisma! I have tried overseas call centers twice now, and frankly I am disappointed. Cash flow not well spent. So, I need Americans, 20-39 years old, genuinely charismatic. The kind of guy (or gal) who can for real hold a dentist's attention. Even if the dentist is between patients and has no interest in talking. Convert! I would far rather have five excellent callers than twenty cheap ones.</p><p>Ask: Overall, basically there are 2 things I care about: 1) They close the sale on the call. 2) They book me for an in-person meeting (then I or one of my guys will drive to meet them in-person) with clear interest shown beforehand. I want crazy good conversion on this whole ordeal. Think like a 25 year old in New York that currently makes $200k per year that has the right set of motivation to push hard on  this. I am open to giving him a bonus if the results are there. And when someone does buy, the handoff to our invoicing team has to be clean too. There is more to it than just calls. That part is not negotiable!</p></div>
-            <div class="mtitle">Under 24 hours later, we agreed on these metrics:</div>
-            <ul class="mlist"><li>We'll call all 1,000 Texas practices on your list using high-end US-based callers, set up an incentive/motivation structure for them, and screen all of them on a live mock call beforehand.</li><li>If we can't reach a practice, we'll call back 3 more times across different days and times before we mark it closed.</li><li>We'll get you 10 purchase commitments over the phone and 25 in-person meetings booked straight into your calendar.</li><li>We'll review 1 in every 15 calls randomly for tone / effort, and immediately offboard any caller who's coasting.</li></ul>
-            <p class="mclose">We did the first 1,000 calls for a $12,000 flat fee in 14 days, and then moved to a $1,000/week retainer for follow-ups and returning calls, to be eventually cancelled at Jason's discretion.</p>
-            <div class="tile-logo"><img class="tl-lockup" src="qlab.png" alt="Q Lab"><span class="tl-name"><em>Dental lab, Austin</em></span></div>
-          </div>
-        </div>
-      </div>
-      <button class="marq-next" id="marqNext" type="button" aria-label="Show the next example">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
-      </button>
-    </div>
-  </div>
-</section>
 
 <div class="morph-wrap" id="morphWrap">
   <div class="morph-sticky">
@@ -807,12 +860,12 @@
     <div class="noise"></div>
     <div class="mcap m0">
       <span class="m0-rule" aria-hidden="true"></span>
-      <p>Our goal is to make projects as easy as possible</p>
+      <p>Your most complex projects, run for you</p>
       <span class="wm how-wm" id="howWm" aria-hidden="true"><span class="gslot"><span class="ghost">g</span></span>rain</span>
     </div>
     <div class="mcap m1"><p><em class="stepno">Step 1</em>Send us a rough description.</p></div>
-    <div class="mcap m2"><p><em class="stepno">Step 2</em>We'll send you an exact list of what we'll do, and an exact price — usually two quotes, so you pick what's best.</p></div>
-    <div class="mcap m3"><p><em class="stepno">Step 3</em>Sign and pay in one link.<br>We start immediately.</p></div>
+    <div class="mcap m2"><p><em class="stepno">Step 2</em>We'll send you the deliverables we've identified, the price, and when we'll be done.</p></div>
+    <div class="mcap m3"><p><em class="stepno">Step 3</em>Sign and pay.<br>We start immediately.</p></div>
     <div class="mpanel p1" id="mp1">
       <div class="bframe">
         <div class="bbar"><i></i><i></i><i></i><span>hiregrain.com</span></div>
@@ -824,30 +877,24 @@
       </div>
     </div>
     <div class="mpanel p2" id="mp2">
-      <div class="pdoc">
-        <div class="pdoc-head"><span>Tax filing project for Amari Smith &ndash; Quote 1 ($5,500)</span></div>
-        <div class="mkicker">Exact project metrics we will hit</div>
-        <div class="mgrid">
-          <div class="mbox">
-            <span class="mnum">Deductions</span>
-            <p class="mdesc">At least $8,400 in deductions and credits identified across both entities. We itemize every one with the statute it comes from, so your accountant can check the work line by line.</p>
-          </div>
-          <div class="mbox">
-            <span class="mnum">Returns filed</span>
-            <p class="mdesc">4 returns filed and accepted — 2 US federal and 2 foreign. You get the stamped confirmation for each one, plus a one-page summary of what was reported where.</p>
-          </div>
-          <div class="mbox">
-            <span class="mnum">Timeline</span>
-            <p class="mdesc">Everything filed within 18 days of you sending the last PDF, which puts it 6 weeks ahead of the deadline. A progress note every Friday until it's done.</p>
-          </div>
-          <div class="mbox">
-            <span class="mnum">30 days continued</span>
-            <p class="mdesc">Any agency notice answered within 48 hours, for a full 30 days after filing. You forward it, we handle it — no new scope, no new invoice.</p>
-          </div>
-          <div class="mbox">
-            <span class="mnum">Accountant time</span>
-            <p class="mdesc">Up to 3 hours with your accountant, scheduled within 5 business days of your asking, so they can walk the return line by line with us.</p>
-          </div>
+      <div class="pdoc pdoc-sow">
+        <div class="pdoc-head"><span>How a project starts</span><span class="pd-mark">grain</span></div>
+        <div class="pd-block pd-you">
+          <p class="pd-eyebrow"><span class="pd-dir">You</span></p>
+          <ul class="pd-check">
+            <li>Your description of the problem</li>
+          </ul>
+        </div>
+        <div class="pd-block pd-us">
+          <p class="pd-eyebrow"><span class="pd-dir">Us</span></p>
+          <ul class="pd-check">
+            <li>What we'll deliver</li>
+            <li>What's out of scope</li>
+            <li>A fixed price for the project and our estimated completion date</li>
+          </ul>
+        </div>
+        <div class="pd-foot">
+          <span><em>Price</em><b>Fixed before we start</b></span><span><em>If we miss it</em><b>Your money back</b></span>
         </div>
       </div>
     </div>
@@ -876,71 +923,64 @@
   </div>
 </div>
 
-<section class="body-sec on-light">
-  <div class="wash"></div><div class="fielddots"></div><div class="noise"></div>
-
-  <div class="wrap">
-    <div class="steps-belt" id="how">
-      <div class="sec-head" style="padding-top:0;">
-        <h2 class="rv rv2">Two minutes on how Grain works</h2>
-      </div>
-
-      <div class="vid rv rv2">
-        <div class="vid-frame">
-          <!-- replace this block with the embed once the film is cut -->
-          <div class="vid-ph">
-            <button class="vid-play" type="button" aria-label="Play the explainer video">
-              <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M8 5.2v13.6L19 12z" fill="currentColor"/></svg>
-            </button>
-            <span class="vid-meta">2:04 · coming soon</span>
-          </div>
+<section class="band-sec on-light">
+  <div class="fielddots"></div><div class="noise"></div>
+  <div class="wrap" style="max-width:100%; padding:0; position:relative; z-index:3;">
+    <div class="marq-band" id="projects">
+      <div class="band-label rv">We run complex projects for you. Usually $1-20k each.</div>
+      <div class="marquee rv rv2">
+        <div class="marq-track" id="marqTrack">
+          <article class="tile sow" role="button" tabindex="0" data-sow-open="sofia" aria-haspopup="dialog">
+            <p class="sow-ask">Source, inspect, buy, and rig used gear for a new 1,400 sq ft studio, in two weeks.</p>
+            <p class="sow-label">We deliver</p>
+            <ul class="sow-list">
+              <li>All 11 items sourced, inspected in person, and bought, under $18,000 total.</li>
+              <li>Lighting grid, cyc wall, and acoustic treatment installed, power checked first.</li>
+              <li>Two days on site, a walkthrough with your DP, a receipt for every purchase.</li>
+            </ul>
+            <p class="sow-open">Open the full scope <span aria-hidden="true">›</span></p>
+            <div class="sow-foot"><span><em>Price</em><b>$6,000 flat</b></span><span><em>Timeline</em><b>14 days</b></span></div>
+          </article>
+          <article class="tile sow" role="button" tabindex="0" data-sow-open="almar" aria-haspopup="dialog">
+            <p class="sow-ask">Build 30 quizzes for a 12th Grade Honors English course.</p>
+            <p class="sow-label">We deliver</p>
+            <ul class="sow-list">
+              <li>30 quizzes live in your CMS, one per essay on the honors list.</li>
+              <li>Every quiz written by a certified high school ELA teacher, ten questions with real distractors.</li>
+              <li>Full answer key review before handoff; anything you reject, rewritten free.</li>
+            </ul>
+            <p class="sow-open">Open the full scope <span aria-hidden="true">›</span></p>
+            <div class="sow-foot"><span><em>Price</em><b>$2,000 flat</b></span><span><em>Timeline</em><b>7 days</b></span><span class="sow-logo"><img class="tl-mark" src="reading-rooms.png" alt="" width="28" height="28">Reading Rooms</span></div>
+          </article>
+          <article class="tile sow" role="button" tabindex="0" data-sow-open="jason" aria-haspopup="dialog">
+            <p class="sow-ask">Cold call 1,000 Texas dental practices with A-Tier sales reps.</p>
+            <p class="sow-label">We deliver</p>
+            <ul class="sow-list">
+              <li>All 1,000 practices called by screened US based callers, three retries each.</li>
+              <li>10 purchase commitments on the phone and 25 in person meetings on your calendar.</li>
+              <li>One in fifteen calls reviewed; any caller coasting is offboarded.</li>
+            </ul>
+            <p class="sow-open">Open the full scope <span aria-hidden="true">›</span></p>
+            <div class="sow-foot"><span><em>Price</em><b>$12,000 flat</b></span><span><em>Timeline</em><b>14 days</b></span><span class="sow-logo"><img class="tl-lockup" src="qlab.png" alt="Q Lab"></span></div>
+          </article>
         </div>
-        <div class="vid-script">
-          <p class="vid-script-label">Transcript:</p>
-          <p class="vid-soon">Coming soon</p>
-        </div>
       </div>
+      <button class="marq-next" id="marqNext" type="button" aria-label="Show the next example">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
     </div>
-
   </div>
 </section>
 
-<section class="founder-sec on-light" id="why">
+<!-- The explainer video section is parked until the film is cut. Remove the hidden attribute to show it. -->
+<section class="dusk-cta on-light" id="start-cta">
   <div class="fielddots"></div>
   <div class="wrap">
-    <div class="founder rv">
-      <div class="founder-photo">
-        <img src="founder.jpg" alt="Rhett Jones, founder of Grain"
-             onerror="this.closest('.founder-photo').classList.add('noimg')">
-        <span class="founder-fallback">RJ</span>
-      </div>
-      <div class="founder-body">
-        <h2>Grain lore.</h2>
-        <p>Yo, I'm Rhett, the cofounder. I previously made <a class="lore-link" href="https://www.ridecased.com" target="_blank" rel="noopener">Cased</a>, a bike clothing business, and I also study economic development in low-income countries.</p><p>When I made my first website for Cased, I wasted $5k on some Fiverr dude. That was lame. When I started running static ads, I then blew $10k on an unvetted agency, which was super lame. Sourcing was always a shitty time. Upwork was such a hassle.</p><p>Then, one day, I was meditating under a tree, and I came to a profound realization of how to make a lot of money: Make a fantastically better version of Upwork! So, for the past year, my cofounder Kyle and I went deep into the talent industry. We met with&hellip;</p>
-        <button class="founder-cta" type="button" id="founderArticle">
-          <span id="founderCtaLabel">Read more</span>
-          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
-        </button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="dusk-cta on-dark" id="start-cta">
-  <div class="wash"></div><div class="fielddots"></div><div class="noise"></div>
-  <div class="wrap">
     <h2 class="rv">Tell us the problem you want solved, or ask us a question</h2>
-    <div class="cta-box rv rv3">
-        <textarea data-cta-editor spellcheck="false"></textarea>
-        <div class="cta-box-tools">
-          <button class="ws-send" data-cta-send>Submit</button>
-          <button class="mic" id="ctaMic" type="button" title="Speak instead of typing" aria-label="Speak instead of typing">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
-            <span>Speak it</span>
-          </button>
-          <button class="ws-esc" type="button" data-sms>text us questions: 512-653-9872</button>
-        </div>
-      </div>
+    <div class="cta-actions rv rv3">
+      <button class="cta-top" type="button" data-cta-top>Tell us what you need done</button>
+      <button class="cta-text" type="button" data-sms>Or text us a question: 512-653-9872</button>
+    </div>
   </div>
 </section>
 
@@ -948,18 +988,63 @@
 <section class="close-belt on-light" id="start">
   <div class="fielddots"></div>
 
-  <div class="foot-giant"><div class="gword">grain</div><div class="foot-tag">projects made easy.</div></div>
+  <div class="foot-giant"><div class="gword" aria-hidden="true">grain</div></div>
 
   <footer>
     <div class="wrap">
       <div class="foot-row">
         <span class="wm" style="font-size:17px;">grain</span>
-        <span class="legal">© Grain Inc. 2026 · hiregrain.com</span>
+        <nav class="foot-nav" aria-label="Site">
+          <a href="/about">About</a><a href="/guarantee">Guarantee</a><a href="/terms">Terms</a><a href="/privacy">Privacy</a>
+        </nav>
+        <span class="legal">&copy; Grain Network, Inc. 2026</span>
       </div>
     </div>
   </footer>
+
 </section>
 
+
+<div class="sow-modal" id="sowModal" hidden>
+  <div class="sow-backdrop" data-sow-close></div>
+  <article class="sow-paper" role="dialog" aria-modal="true" aria-labelledby="sowTitle" tabindex="-1">
+    <button class="sow-x" type="button" data-sow-close aria-label="Close">&times;</button>
+    <div class="sow-body" id="sowBody"></div>
+  </article>
+</div>
+<template data-sow="sofia">
+  <div class="sow-sheet-head"><span class="sow-eyebrow">Grain · Scope of work</span><span class="sow-eyebrow">Sofia, Photo studio, Austin</span></div>
+  <h3>Sofia asked us to kit out her studio in Austin and buy the equipment</h3>
+  <p class="sow-eyebrow sow-sec">What they sent us</p>
+  <blockquote class="sow-raw"><p>We took a lease on a new 1,400 square ft space in Austin and I have about two weeks before the first shoots are booked. To give yu an idea, it needs a full lighting grid, a cyc wall, sound treatment, and two camera bodies with glass. I do not have the budget to buy any of that new atm.</p><p>the used market here is fine but its a nightmare to actually work it well! SO we have tried facebook marketplace, a couple of local rental houses, i met some guy in san marcos with three arri kits. And we need to do this for over 10 items, and every one of them needs somebody to physically go look at the gear, test it, and haggle. i have driven out twice already and both were a waste of an afternoon tbh lol.</p><p>So what I actually need is a person on the ground here. Like ideally this is someone who can source the equipment, go and inspect it in person, and also hopefully negotiate with the FB Marketplace seller (or wherever else the buy it). Then they need to be in the room afterwards to rig the lighting and set the whole thing up for a couple days (this can be a diff person but ideally is the same).</p><p>TO be very clear I don not want a consultant who emails me a spreadsheet of options. A lot of this is just driving around in person!</p></blockquote>
+  <p class="sow-eyebrow sow-sec">What we agreed, within a day</p>
+  <ul class="sow-agreed"><li>We'll source, inspect in-person, and buy all 11 items, and keep your total spend under $18,000.</li><li>We'll install the full lighting grid, the cyc wall and the acoustic treatment, and we'll confirm the room's power can carry the grid before confirming the purchases.</li><li>Our tech will be on-site for 2 days, and he'll do a full walkthrough with your DP before the first shoot.</li><li>If anything fails once it's rigged we'll replace it at our cost.</li><li>You'll get a receipt for every purchase (with condition notes and the seller's contact attached).</li></ul>
+  <div class="sow-sheet-foot">
+    <span><em>Price</em><b>$6,000 flat</b></span><span><em>Timeline</em><b>14 days</b></span><span><em>Outcome</em><b>Studio kitted out to Sofia's satisfaction</b></span>
+  </div>
+</template>
+<template data-sow="almar">
+  <div class="sow-sheet-head"><span class="sow-eyebrow">Grain · Scope of work</span><span class="sow-eyebrow">Almar, CTO, Reading Rooms</span></div>
+  <h3>Almar asked us to build an internal course</h3>
+  <p class="sow-eyebrow sow-sec">What they sent us</p>
+  <blockquote class="sow-raw"><p>Hello there. I am Almar, the CTO of Reading Rooms. To give you context we are currently building out our 12th Grade Honors course (ELA / English). This will require making 30 different quizzes around 30 different standard essays. So we need to hire two people (or perhaps one person with both skills?) to do the technical work of building the quizzes on our site, and all of the actual editorial work of choosing the right texts + writing the question choices. So the second part is ideal for a high school English teacher. Like that's not an engineer skillset, especially because they actually need to know regular ELA 12 coursework. Anyway. The platform and the CMS already exist, so nobody needs to write code. What the engineer needs to do is data entry into our question builder. But it has to be done by someone who knows what a good distractor question looks like. 2 contractors have tried this already and it wasn't great, I mean, both handed back questions where the correct answer was obvious. So to be very clear I would rather pay once for someone who actually knows the material. In a full hands-off way where I have to do no reviewing of this myself; right now I am the bottleneck and I want to get past this.</p></blockquote>
+  <p class="sow-eyebrow sow-sec">What we agreed, within a day</p>
+  <ul class="sow-agreed"><li>We'll build 30 quizzes (live in your CMS) for each essay on the 12th Grade Honors list.</li><li>Every quiz will be written by a certified high school ELA teacher (10 questions each) with plausible distractors.</li><li>We'll run a full answer key review before handing it off, and we’ll rewrite anything you reject at no extra cost.</li></ul>
+  <div class="sow-sheet-foot">
+    <span><em>Price</em><b>$2,000 flat</b></span><span><em>Timeline</em><b>7 days</b></span><span><em>Outcome</em><b>Course built to Almar's satisfaction</b></span>
+  </div>
+</template>
+<template data-sow="jason">
+  <div class="sow-sheet-head"><span class="sow-eyebrow">Grain · Scope of work</span><span class="sow-eyebrow">Jason, Q Lab, dental prosthetics, Austin</span></div>
+  <h3>Jason asked us to cold call potential customers</h3>
+  <p class="sow-eyebrow sow-sec">What they sent us</p>
+  <blockquote class="sow-raw"><p>We at Q Lab manufacture dental prosthetics; crowns, bridges, that whole category. As it stands, the current focus of our sales is that we sell direct to the practices instead of going through distributors. Our growth so far has been almost all referral, and it has flattened out over the last year. Anyway, currently I have a list of roughly 1,000 practices across Texas, and I need someone to call them. I need someone to call them well!</p><p>What matters most to me is who is actually on the phone, can jam phones all day, but has the charisma! I have tried overseas call centers twice now, and frankly I am disappointed. Cash flow not well spent. So, I need Americans, 20-39 years old, genuinely charismatic. The kind of guy (or gal) who can for real hold a dentist's attention. Even if the dentist is between patients and has no interest in talking. Convert! I would far rather have five excellent callers than twenty cheap ones.</p><p>Ask: Overall, basically there are 2 things I care about: 1) They close the sale on the call. 2) They book me for an in-person meeting (then I or one of my guys will drive to meet them in-person) with clear interest shown beforehand. I want crazy good conversion on this whole ordeal. Think like a 25 year old in New York that currently makes $200k per year that has the right set of motivation to push hard on this. I am open to giving him a bonus if the results are there. And when someone does buy, the handoff to our invoicing team has to be clean too. There is more to it than just calls. That part is not negotiable!</p></blockquote>
+  <p class="sow-eyebrow sow-sec">What we agreed, within a day</p>
+  <ul class="sow-agreed"><li>We'll call all 1,000 Texas practices on your list using high-end US-based callers, set up an incentive/motivation structure for them, and screen all of them on a live mock call beforehand.</li><li>If we can't reach a practice, we'll call back 3 more times across different days and times before we mark it closed.</li><li>We'll get you 10 purchase commitments over the phone and 25 in-person meetings booked straight into your calendar.</li><li>We'll review 1 in every 15 calls randomly for tone / effort, and immediately offboard any caller who's coasting.</li></ul>
+  <div class="sow-sheet-foot">
+    <span><em>Price</em><b>$12,000 flat, then $1,000 a week</b></span><span><em>Timeline</em><b>14 days, then weekly</b></span><span><em>Outcome</em><b>1,000 practices called to Jason's satisfaction</b></span>
+  </div>
+</template>
 <div class="sms-modal" id="smsModal" hidden>
   <div class="sms-backdrop" data-sms-close></div>
   <div class="sms-card" role="dialog" aria-modal="true" aria-labelledby="smsNum">
@@ -1095,15 +1180,11 @@ function openWS() {
   }, 500);
 }
 document.querySelectorAll('[data-open-ws]').forEach(b => b.addEventListener('click', () => openWS()));
-document.querySelectorAll('[data-cta-send]').forEach(btn => {
-  const ta = btn.closest('.cta-box').querySelector('[data-cta-editor]');
-  const go = () => {
-    const v = ta.value.trim();
-    if (v) { editor.value = v; schedule(); }
-    openWS();
-  };
-  btn.addEventListener('click', go);
-  ta.addEventListener('keydown', e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) go(); });
+document.querySelectorAll('[data-cta-top]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.getElementById('hero').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setTimeout(() => editor.focus({ preventScroll: true }), 650);
+  });
 });
 /* ghost typing demo in the empty intake box */
 (function () {
@@ -1223,7 +1304,7 @@ function wireMic(micId, target, after) {
   });
 }
 wireMic('micBtn', editor, schedule);
-wireMic('ctaMic', document.querySelector('[data-cta-editor]'));
+/* the bottom box no longer has its own editor; its button returns to the form */
 
 document.getElementById('doneClose').addEventListener('click', () => {
   submitted = false; editor.value = '';
@@ -1328,6 +1409,30 @@ document.getElementById('submitBtn').addEventListener('click', () => {
 
 /* text-us card */
 (function () {
+
+/* ============ SCOPE SHEETS ============ */
+(function () {
+  const modal = document.getElementById('sowModal');
+  const body = document.getElementById('sowBody');
+  const paper = modal.querySelector('.sow-paper');
+  let opener = null;
+  const open = (slug, from) => {
+    const t = document.querySelector('template[data-sow="' + slug + '"]');
+    if (!t) return;
+    body.innerHTML = '';
+    body.appendChild(t.content.cloneNode(true));
+    const h = body.querySelector('h3'); if (h) h.id = 'sowTitle';
+    opener = from; modal.hidden = false; document.body.style.overflow = 'hidden'; paper.focus();
+  };
+  const close = () => { modal.hidden = true; document.body.style.overflow = ''; if (opener) opener.focus(); };
+  document.querySelectorAll('[data-sow-open]').forEach(card => {
+    card.addEventListener('click', () => open(card.dataset.sowOpen, card));
+    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(card.dataset.sowOpen, card); } });
+  });
+  document.querySelectorAll('[data-sow-close]').forEach(b => b.addEventListener('click', close));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) close(); });
+})();
+
   const modal = document.getElementById('smsModal');
   const copy = document.getElementById('smsCopy');
   const NUM = '+1 512-653-9872';
@@ -1386,7 +1491,7 @@ document.getElementById('submitBtn').addEventListener('click', () => {
     if (!on && el.classList.contains('play')) { el.classList.remove('play'); if (isTyping) stopTypeDemo(); }
   }
   const DARK = [22, 26, 33], BONE = [245, 244, 241], LIGHTDOT = [237, 238, 242], INKDOT = [29, 32, 37];
-  const AMB = [232, 179, 107];
+  const AMB = [105, 118, 220];
   let W = 0, H = 0, dpr = 1, grains = [];
   let seed = 7;
   const rnd = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
@@ -1417,18 +1522,38 @@ document.getElementById('submitBtn').addEventListener('click', () => {
   // check lives in the frame loop so crossing the breakpoint mid-session works.
   const MOBILE = matchMedia('(max-width:960px)');
   let mobileWired = false;
+  const sticky = document.querySelector('.morph-sticky');
   function wireMobile() {
     if (mobileWired) return;
     mobileWired = true;
     if (window.__howDissolve) window.__howDissolve(0);
+    // a caption and its panel arrive together, the moment the caption is a fifth of the way in
+    const pairs = [[caps[3], null], [caps[0], panels[0]], [caps[1], panels[1]], [caps[2], panels[2]]];
     const io = new IntersectionObserver(es => {
       es.forEach(e => {
         if (!e.isIntersecting) return;
-        setPanel(e.target, 1, e.target === panels[0]);
+        const pair = pairs.find(pr => pr[0] === e.target || pr[1] === e.target);
+        if (!pair) return;
+        pair[0].classList.add('in');
+        if (pair[1]) { pair[1].classList.add('in'); setPanel(pair[1], 1, pair[1] === panels[0]); }
         io.unobserve(e.target);
       });
-    }, { threshold: 0.15 });
-    panels.forEach(el => io.observe(el));
+    }, { threshold: 0.2 });
+    pairs.forEach(pr => { io.observe(pr[0]); if (pr[1]) io.observe(pr[1]); });
+    // the floor goes from dusk to bone as the third step approaches, the way the desktop canvas does
+    const lightUp = () => {
+      const r3 = caps[2].getBoundingClientRect();
+      const t = ease(clamp01((innerHeight * 0.85 - r3.top) / (innerHeight * 0.6)));
+      const WARM = [124, 116, 102];
+      sticky.style.backgroundColor = t < 0.5 ? mix(DARK, WARM, t * 2) : mix(WARM, BONE, (t - 0.5) * 2);
+      mfLight.style.opacity = (0.10 * (1 - t)).toFixed(3);
+      mfInk.style.opacity = (0.09 * t).toFixed(3);
+      sticky.classList.toggle('lit', t > 0.5);
+      wrap.style.setProperty('--seam', t.toFixed(3));
+    };
+    addEventListener('scroll', lightUp, { passive: true });
+    addEventListener('resize', lightUp);
+    lightUp();
   }
 
   const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
@@ -1457,6 +1582,7 @@ document.getElementById('submitBtn').addEventListener('click', () => {
         ctx.fillStyle = g2; ctx.fillRect(0, 0, W, H);
       }
       mfLight.style.opacity = (0.10 * (1 - t)).toFixed(3);
+      wrap.style.setProperty('--seam', t.toFixed(3));
       mfInk.style.opacity = (0.09 * t).toFixed(3);
       const move = clamp01(p / 0.88);
       for (const g of grains) {
@@ -1464,7 +1590,7 @@ document.getElementById('submitBtn').addEventListener('click', () => {
         if (intro <= 0) continue;
         const q = ease(clamp01((move - g.d) / 0.66));
         const x = lerp(g.sx, g.tx, q), y = lerp(g.sy, g.ty, q);
-        ctx.fillStyle = (g.w > 0.99 && q > 0.9) ? mix(AMB, [143, 95, 30], t) : mix(LIGHTDOT, INKDOT, t);
+        ctx.fillStyle = (g.w > 0.99 && q > 0.9) ? mix(AMB, [92, 103, 196], t) : mix(LIGHTDOT, INKDOT, t);
         const handoff = ease(clamp01((p - 0.94) / 0.06));
         ctx.globalAlpha = (0.4 + 0.6 * q) * intro * (1 - handoff * 0.75);
         ctx.beginPath(); ctx.arc(x, y, lerp(g.r, 0.9, handoff), 0, 6.2832); ctx.fill();
